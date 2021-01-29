@@ -50,21 +50,23 @@ public class FlashCard {
 
     protected JsonObjectRequest getRequest(String url){
         return new JsonObjectRequest
-                       (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                       (Request.Method.GET, "https://jsonplaceholder.typicode.com/todos/1",
+                               null,
+                               new Response.Listener<JSONObject>() {
 
-                           @Override
-                           public void onResponse(JSONObject response) {
-                               Log.i("Network:", "Response worked");
-                           }
-                       }, new Response.ErrorListener() {
+                                   @Override
+                                   public void onResponse(JSONObject response) {
+                                       Log.i("Network:", "Response worked");
+                                   }
+                               }, new Response.ErrorListener() {
 
-                           @Override
-                           public void onErrorResponse(VolleyError error) {
-                               // TODO: Handle error
-                               Log.i("Network Error", "request failed");
+                                   @Override
+                                   public void onErrorResponse(VolleyError error) {
+                                       // TODO: Handle error
+                                       Log.i("Network Error", "request failed");
 
-                           }
-                       });
+                                   }
+                               });
     }
 
 
