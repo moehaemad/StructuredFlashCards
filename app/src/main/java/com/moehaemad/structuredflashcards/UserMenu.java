@@ -34,44 +34,6 @@ public class UserMenu extends AppCompatActivity {
         super.onResume();
         Button createRequest = findViewById(R.id.user_menu_network);
         createRequest.setOnClickListener(checkUser);
-
-
-/*        createRequest.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-
-                TextView networkText = findViewById(R.id.user_menu_network_result);
-                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                String url ="https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc";
-
-                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.i("asdasd", "ASd");
-
-                                TextView putNetResponse = findViewById(R.id.user_menu_network_result);
-                                try{
-                                    String userId = response.getString("result");
-                                    putNetResponse.setText(userId);
-                                }catch(JSONException e){
-                                    Log.e("error in json", e.getMessage());
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e("asdASD","Asdasd");
-                            }
-                });
-
-
-                queue.add(jsonRequest);
-
-
-            }
-        });*/
     }
 
     protected View.OnClickListener checkUser = new View.OnClickListener(){
@@ -79,10 +41,17 @@ public class UserMenu extends AppCompatActivity {
         public void onClick(View v) {
             FlashCard getUser = new FlashCard(getApplicationContext());
             getUser.setMethod("GET");
-            getUser.getRequest("https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc");
+            getUser.getRequest("https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc",
+                    new UserRequests<JSONObject>() {
+                        @Override
+                        public void getResult(JSONObject object) {
+                            TextView result = findViewById(R.id.user_menu_network_result);
+                            result.setText("Received JSON Object");
+                        }
+                    });
             //TODO: change view according to http request
-            TextView networkResult = findViewById(R.id.user_menu_network_result);
-            networkResult.setText("Something happened");
+            // TextView networkResult = findViewById(R.id.user_menu_network_result);
+            // networkResult.setText("Something happened");
         }
     };
 }
