@@ -21,14 +21,15 @@ public class FlashCard {
     private String question;
     private String answer;
     private RequestQueue request;
+    private int httpType;
 
 
     public FlashCard(Context appContext){
         this.id=0;
         this.question = "";
         this.answer = "";
-        this.request = getRequestQueue();
         this.appContext = appContext;
+        this.request = getRequestQueue();
     }
 
 
@@ -39,20 +40,33 @@ public class FlashCard {
         this.answer = answer;
     }
 
+    protected void setMethod(String request){
+        switch(request){
+            case "GET":
+                this.httpType = Request.Method.GET;
+                break;
+            case "PUT":
+                this.httpType = Request.Method.PUT;
+                break;
+            case "DELETE":
+                this.httpType = Request.Method.DELETE;
+                break;
+        }
+    }
 
+    //create the queue for network calls as per Volley library
     private RequestQueue getRequestQueue (){
 
-        //TODO: create endpoint on REST API on website
-        String url = "https://moehaemad.ca/someEndpoint";
         if (this.request == null){
-            this.request = Volley.newRequestQueue(this.appContext);
+            this.request = Volley.newRequestQueue(this.appContext.getApplicationContext());
         }
         return this.request;
     }
 
+    //start the network request and return the object as result from http GET request
     protected JsonObjectRequest getRequest(String url){
         return new JsonObjectRequest
-                       (Request.Method.GET, "https://jsonplaceholder.typicode.com/todos/1",
+                       (this.httpType, url,
                                null,
                                new Response.Listener<JSONObject>() {
 

@@ -33,13 +33,16 @@ public class UserMenu extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Button createRequest = findViewById(R.id.user_menu_network);
-        createRequest.setOnClickListener(new View.OnClickListener(){
+        createRequest.setOnClickListener(checkUser);
+
+
+/*        createRequest.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
                 TextView networkText = findViewById(R.id.user_menu_network_result);
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                String url ="https://jsonplaceholder.typicode.com/todos/1";
+                String url ="https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc";
 
                 JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                         new Response.Listener<JSONObject>() {
@@ -49,7 +52,7 @@ public class UserMenu extends AppCompatActivity {
 
                                 TextView putNetResponse = findViewById(R.id.user_menu_network_result);
                                 try{
-                                    String userId = response.getString("userId");
+                                    String userId = response.getString("result");
                                     putNetResponse.setText(userId);
                                 }catch(JSONException e){
                                     Log.e("error in json", e.getMessage());
@@ -68,6 +71,18 @@ public class UserMenu extends AppCompatActivity {
 
 
             }
-        });
+        });*/
     }
+
+    protected View.OnClickListener checkUser = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            FlashCard getUser = new FlashCard(getApplicationContext());
+            getUser.setMethod("GET");
+            getUser.getRequest("https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc");
+            //TODO: change view according to http request
+            TextView networkResult = findViewById(R.id.user_menu_network_result);
+            networkResult.setText("Something happened");
+        }
+    };
 }
