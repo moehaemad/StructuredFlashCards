@@ -1,4 +1,4 @@
-package com.moehaemad.structuredflashcards;
+package com.moehaemad.structuredflashcards.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.moehaemad.structuredflashcards.model.UserRequests;
+import com.moehaemad.structuredflashcards.model.FlashCard;
+import com.moehaemad.structuredflashcards.R;
+import com.moehaemad.structuredflashcards.model.Network;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +44,7 @@ public class LoginMenu extends AppCompatActivity {
             String username = user.getText().toString();
             // String password = findViewById(R.id.login_menu_password).getText().toString();
             getUser.getRequest("https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc",
-                    new UserRequests<JSONObject>() {
+                    new Network<JSONObject>() {
                         @Override
                         public void getResult(JSONObject object) {
                             TextView result = findViewById(R.id.login_menu_network);

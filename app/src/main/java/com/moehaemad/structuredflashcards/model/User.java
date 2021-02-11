@@ -1,4 +1,4 @@
-package com.moehaemad.structuredflashcards;
+package com.moehaemad.structuredflashcards.model;
 
 import java.util.HashMap;
 

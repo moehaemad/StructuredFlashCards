@@ -1,5 +1,5 @@
 package com.moehaemad.structuredflashcards.model;
 
-public interface UserRequests<T> {
+public interface Network<T> {
     public void getResult(T object);
 }

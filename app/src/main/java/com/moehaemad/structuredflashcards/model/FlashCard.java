@@ -1,4 +1,4 @@
-package com.moehaemad.structuredflashcards;
+package com.moehaemad.structuredflashcards.model;
 
 
 import android.content.Context;
@@ -10,7 +10,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.moehaemad.structuredflashcards.model.UserRequests;
 
 import org.json.JSONObject;
 
@@ -23,6 +22,8 @@ public class FlashCard{
     private int httpType;
     public static JSONObject queryResult;
 
+
+    //TODO: clear away methods for network requests and reorganize for just Flash Card info
 
     public FlashCard(Context appContext){
         this.id=0;
@@ -41,7 +42,7 @@ public class FlashCard{
         this.answer = answer;
     }
 
-    protected void setMethod(String request){
+    public void setMethod(String request){
         switch(request){
             case "GET":
                 this.httpType = Request.Method.GET;
@@ -66,7 +67,7 @@ public class FlashCard{
 
 
     //start the network request and return the object as result from http GET request
-    public void getRequest(String url, final UserRequests<JSONObject> listener){
+    public void getRequest(String url, final Network<JSONObject> listener){
         Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

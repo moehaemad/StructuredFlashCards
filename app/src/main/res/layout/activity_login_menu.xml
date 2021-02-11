@@ -4,47 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserMenu">
+    tools:context=".controller.LoginMenu">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/log_menu_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="258dp"
-        android:text="Welcome User"
+        android:text="@string/login_menu_title"
+        android:textAlignment="center"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/user_menu_network"
+        app:layout_constraintBottom_toTopOf="@+id/login_menu_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/user_menu_network"
-        android:layout_width="wrap_content"
+        android:id="@+id/login_menu_network"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="103dp"
         android:layout_marginEnd="104dp"
-        android:layout_marginBottom="108dp"
-        android:text="check Network request"
-        app:layout_constraintBottom_toTopOf="@+id/user_menu_network_result"
+        android:layout_marginBottom="48dp"
+        android:text="@string/login_menu_submit"
+        app:layout_constraintBottom_toTopOf="@+id/login_menu_network_result"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/user_menu_network_result"
+        android:id="@+id/login_menu_network_result"
         android:layout_width="166dp"
         android:layout_height="136dp"
         android:layout_marginStart="122dp"
         android:layout_marginEnd="123dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="16dp"
         android:text="TextView"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/login_menu_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:ems="10"
+        android:hint="@string/login_menu_username"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/login_menu_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/login_menu_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/login_menu_pass"
+        android:imeOptions="actionSend"
+        app:layout_constraintBottom_toTopOf="@+id/login_menu_network"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

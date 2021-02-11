@@ -1,8 +1,10 @@
-package com.moehaemad.structuredflashcards;
+package com.moehaemad.structuredflashcards.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.moehaemad.structuredflashcards.R;
 
 public class DeckMenu extends AppCompatActivity {
 
