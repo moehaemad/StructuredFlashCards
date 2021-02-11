@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 changeView(DeckMenu.class);
                 break;
             case R.id.main_login:
-                changeView(UserMenu.class);
+                changeView(LoginMenu.class);
                 break;
         }
     }

@@ -10,8 +10,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.moehaemad.structuredflashcards.model.UserRequests;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FlashCard{

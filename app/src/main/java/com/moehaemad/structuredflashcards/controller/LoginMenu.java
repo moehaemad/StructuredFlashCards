@@ -2,38 +2,35 @@ package com.moehaemad.structuredflashcards;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.moehaemad.structuredflashcards.model.UserRequests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserMenu extends AppCompatActivity {
+public class LoginMenu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_menu);
+        setContentView(R.layout.activity_login_menu);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Button createRequest = findViewById(R.id.user_menu_network);
+        Button createRequest = findViewById(R.id.login_menu_network);
         createRequest.setOnClickListener(checkUser);
+    }
+
+    private Boolean checkUserInfo(){
+        return true;
     }
 
     protected View.OnClickListener checkUser = new View.OnClickListener(){
@@ -41,12 +38,19 @@ public class UserMenu extends AppCompatActivity {
         public void onClick(View v) {
             FlashCard getUser = new FlashCard(getApplicationContext());
             getUser.setMethod("GET");
+            EditText user = findViewById(R.id.login_menu_username);
+            String username = user.getText().toString();
+            // String password = findViewById(R.id.login_menu_password).getText().toString();
             getUser.getRequest("https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc",
                     new UserRequests<JSONObject>() {
                         @Override
                         public void getResult(JSONObject object) {
-                            TextView result = findViewById(R.id.user_menu_network_result);
-                            result.setText("Received JSON Object");
+                            TextView result = findViewById(R.id.login_menu_network);
+                            try {
+                                result.setText(object.getString("result"));
+                            } catch (JSONException e) {
+                                Log.e("error", "error accessing json object");
+                            }
                         }
                     });
             //TODO: change view according to http request
