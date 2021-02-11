@@ -16,6 +16,7 @@ public class User {
 
     private int[] getDeckIds(){
     //    TODO: query database for array of deck ids attached to a user using user id
+    //    TODO: create networkRequest object and retrieve the json data which will contain ids
         int[] ids = {};
         return ids;
     };
@@ -24,6 +25,7 @@ public class User {
 
     private void pairDeckIdNames(){
     //    TODO: for each item in the deck id arrays attach the associated name to the hashmap
+    //    TODO: take the data from getDeckIds and associate them to a HasMap 'deck' object
     }
 
     protected HashMap<Integer, String> getDecks(){

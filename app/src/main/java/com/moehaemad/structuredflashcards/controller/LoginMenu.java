@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.moehaemad.structuredflashcards.model.FlashCard;
 import com.moehaemad.structuredflashcards.R;
 import com.moehaemad.structuredflashcards.model.Network;
+import com.moehaemad.structuredflashcards.model.NetworkRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,12 +39,13 @@ public class LoginMenu extends AppCompatActivity {
     protected View.OnClickListener checkUser = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            FlashCard getUser = new FlashCard(getApplicationContext());
-            getUser.setMethod("GET");
+            //TODO: change the flash card object to be the networkRequest
+            NetworkRequest checkUser = new NetworkRequest(getApplicationContext());
+            checkUser.setMethod("GET");
             EditText user = findViewById(R.id.login_menu_username);
             String username = user.getText().toString();
             // String password = findViewById(R.id.login_menu_password).getText().toString();
-            getUser.getRequest("https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc",
+            checkUser.getRequest("https://moehaemad.ca/structuredFlashCards/checkUser/abc/abc",
                     new Network<JSONObject>() {
                         @Override
                         public void getResult(JSONObject object) {

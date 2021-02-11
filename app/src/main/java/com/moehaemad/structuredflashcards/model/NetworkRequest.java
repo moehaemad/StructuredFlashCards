@@ -3,6 +3,7 @@ package com.moehaemad.structuredflashcards.model;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 public class NetworkRequest {
     public static Context appContext;
     public RequestQueue requestQueue;
+    protected int httpType;
 
     public NetworkRequest(Context appContext){
         this.appContext = appContext;
@@ -29,9 +31,23 @@ public class NetworkRequest {
         return this.requestQueue;
     }
 
+    public void setMethod(String http){
+        switch(http){
+            case "GET":
+                this.httpType = Request.Method.GET;
+                break;
+            case "PUT":
+                this.httpType = Request.Method.PUT;
+                break;
+            case "DELETE":
+                this.httpType = Request.Method.DELETE;
+                break;
+        }
+    }
 
 
-    public void getRequest (String url, int httpType, final Network <JSONObject> listener){
+
+    public void getRequest (String url, final Network <JSONObject> listener){
         Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -48,7 +64,7 @@ public class NetworkRequest {
                 Log.i("Network Error", "request failed");
             }
         };
-        this.requestQueue.add(new JsonObjectRequest(httpType, url, null,
+        this.requestQueue.add(new JsonObjectRequest(this.httpType, url, null,
                 response, error));
     }
 
