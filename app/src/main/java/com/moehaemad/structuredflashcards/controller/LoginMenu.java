@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.moehaemad.structuredflashcards.model.FlashCard;
 import com.moehaemad.structuredflashcards.R;
 import com.moehaemad.structuredflashcards.model.Network;
 import com.moehaemad.structuredflashcards.model.NetworkRequest;
@@ -36,10 +35,11 @@ public class LoginMenu extends AppCompatActivity {
         return true;
     }
 
+
+
     protected View.OnClickListener checkUser = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            //TODO: change the flash card object to be the networkRequest
             NetworkRequest checkUser = new NetworkRequest(getApplicationContext());
             checkUser.setMethod("GET");
             EditText user = findViewById(R.id.login_menu_username);
