@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startContent">
+    <fragment
+        android:id="@+id/startContent"
+        android:name="com.moehaemad.structuredflashcards.ui.StartContent"
+        android:label="fragment_start_content"
+        tools:layout="@layout/fragment_start_content" >
+        <action
+            android:id="@+id/action_startContent_to_deckMenu2"
+            app:destination="@id/deckMenu2" />
+    </fragment>
+    <activity
+        android:id="@+id/deckMenu2"
+        android:name="com.moehaemad.structuredflashcards.controller.DeckMenu"
+        android:label="activity_deck_menu"
+        tools:layout="@layout/activity_deck_menu" />
+</navigation>
