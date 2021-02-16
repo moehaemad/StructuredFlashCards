@@ -7,8 +7,8 @@
     <fragment
         android:id="@+id/startContent"
         android:name="com.moehaemad.structuredflashcards.ui.StartContent"
-        android:label="fragment_start_content"
-        tools:layout="@layout/fragment_start_content" >
+        android:label="fragment_constraint_login"
+        tools:layout="@layout/fragment_constraint_login">
         <action
             android:id="@+id/action_startContent_to_deckMenu2"
             app:destination="@id/deckMenu2" />
