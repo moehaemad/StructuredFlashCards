@@ -11,17 +11,16 @@ import androidx.fragment.app.Fragment;
 
 import com.moehaemad.structuredflashcards.R;
 
+public class LoginFragment extends Fragment {
 
-public class DeckFragment extends Fragment {
-
-    public void DeckFragment(){
-    //    TODO: configure deck View here
+    public void LoginFragment(){
+    //    TODO: get user input from here
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_deck_start, container);
+        View root = inflater.inflate(R.layout.fragment_login_menu, container);
         return root;
     }
 }

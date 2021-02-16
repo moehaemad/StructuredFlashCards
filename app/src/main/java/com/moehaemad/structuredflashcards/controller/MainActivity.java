@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Get the navigation View in the navigation drawer
         NavigationView navView = findViewById(R.id.main_nav_view);
 
-/*        //setup the navigation controller for the fragment started the navigation graph
+        //setup the navigation controller for the fragment started the navigation graph
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                                                                    .findFragmentById(R.id.fragment_login);*/
-        NavController navController =  Navigation.findNavController(this, R.id.fragment_login);
+                                                                    .findFragmentById(R.id.fragment_host);
+        // NavController navController =  Navigation.findNavController(this, R.id.fragment_parent);
 
-        // NavController navController = navHostFragment.getNavController();
+        NavController navController = navHostFragment.getNavController();
 
         //setup the top bar configuration with the nav controller graph and set the drawer layout
         this.topBarConfig = new  AppBarConfiguration.Builder()
