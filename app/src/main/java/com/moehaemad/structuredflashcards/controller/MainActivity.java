@@ -29,25 +29,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //get Top toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // get navigation drawer layout
         DrawerLayout drawerLayout = findViewById(R.id.main_nav_drawer);
 
         //Get the navigation View in the navigation drawer
         NavigationView navView = findViewById(R.id.main_nav_view);
-/*
-        //setup the navigation controller for the fragment started the navigation graph
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                                                                    .findFragmentById(R.id.start_fragment);
-        NavController navController =  navHostFragment.getNavController();*/
 
-        NavController navController = Navigation.findNavController(this, R.id.start_fragment);
+/*        //setup the navigation controller for the fragment started the navigation graph
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                                                                    .findFragmentById(R.id.fragment_login);*/
+        NavController navController =  Navigation.findNavController(this, R.id.fragment_login);
+
+        // NavController navController = navHostFragment.getNavController();
+
         //setup the top bar configuration with the nav controller graph and set the drawer layout
         this.topBarConfig = new  AppBarConfiguration.Builder()
                                     .setDrawerLayout(drawerLayout).build();
 
         // setup the navigationUI for the navigation drawer using navigation view and nav controller
         NavigationUI.setupActionBarWithNavController(this, navController, this.topBarConfig);
+
         NavigationUI.setupWithNavController(navView, navController);
     }
 
