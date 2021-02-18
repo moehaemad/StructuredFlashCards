@@ -8,15 +8,30 @@
         android:id="@+id/startContent"
         android:name="com.moehaemad.structuredflashcards.ui.StartContent"
         android:label="fragment_constraint_login"
-        tools:layout="@layout/fragment_constraint_login" />
+        tools:layout="@layout/fragment_constraint_login" >
+        <action
+            android:id="@+id/action_startContent_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_startContent_to_deckFragment"
+            app:destination="@id/deckFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.moehaemad.structuredflashcards.ui.LoginFragment"
         android:label="fragment_login_menu"
-        tools:layout="@layout/fragment_login_menu" />
+        tools:layout="@layout/fragment_login_menu" >
+        <action
+            android:id="@+id/action_loginFragment_to_startContent"
+            app:destination="@id/startContent" />
+    </fragment>
     <fragment
         android:id="@+id/deckFragment"
         android:name="com.moehaemad.structuredflashcards.ui.DeckFragment"
         android:label="fragment_deck_start"
-        tools:layout="@layout/fragment_deck_start" />
+        tools:layout="@layout/fragment_deck_start" >
+        <action
+            android:id="@+id/action_deckFragment_to_startContent"
+            app:destination="@id/startContent" />
+    </fragment>
 </navigation>

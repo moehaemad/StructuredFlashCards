@@ -46,12 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Get the navigation View in the navigation drawer
         NavigationView navView = findViewById(R.id.main_nav_view);
 
-/*        //setup the navigation controller for the fragment started the navigation graph
+        //setup the navigation controller for the fragment started the navigation graph
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                                                                    .findFragmentById(R.id.fragment_host);*/
-        NavController navController =  Navigation.findNavController(this, R.id.fragment_host);
+                                                                    .findFragmentById(R.id.fragment_host);
 
-        // NavController navController = navHostFragment.getNavController();
+        NavController navController = navHostFragment.getNavController();
 
         //setup the top bar configuration with the nav controller graph and set the drawer layout
         this.topBarConfig = new  AppBarConfiguration.Builder(navController.getGraph())
@@ -66,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        //setup buttons
         Button startDeck = findViewById(R.id.main_start_deck);
         startDeck.setOnClickListener(this);
         Button loginView = findViewById(R.id.main_login);
@@ -78,23 +78,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return NavigationUI.navigateUp(navController, this.topBarConfig) || super.onSupportNavigateUp();
     }
 
-    public void changeView(@NonNull Class toStart, @NonNull int nextDestination){
-        // Intent toStartView = new Intent (Intent.ACTION_VIEW);
-        // toStartView.setClass(getApplicationContext(), toStart);
-        // startActivity(toStartView);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(nextDestination, toStart, null)
-                .setReorderingAllowed(true)
-                .commit();
-    }
-
 
 
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
-        // changeView(null, viewId);
         NavHostController navController = (NavHostController) Navigation.findNavController(this, R.id.fragment_host);
         switch(viewId){
             case R.id.main_start_deck:
