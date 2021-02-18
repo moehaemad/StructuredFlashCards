@@ -20,6 +20,7 @@ public class StartContent extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        // please refer to DeckFragment for explanation why attachToRoot = false
         return inflater.inflate(R.layout.fragment_constraint_login, container, false);
     }
 }

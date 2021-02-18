@@ -1,9 +1,16 @@
 package com.moehaemad.structuredflashcards.controller;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavHost;
+import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +24,7 @@ import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 import com.moehaemad.structuredflashcards.R;
+import com.moehaemad.structuredflashcards.ui.DeckFragment;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -70,22 +78,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return NavigationUI.navigateUp(navController, this.topBarConfig) || super.onSupportNavigateUp();
     }
 
-    public void changeView(Class toStart){
-        Intent toStartView = new Intent (Intent.ACTION_VIEW);
-        toStartView.setClass(getApplicationContext(), toStart);
-        startActivity(toStartView);
+    public void changeView(@NonNull Class toStart, @NonNull int nextDestination){
+        // Intent toStartView = new Intent (Intent.ACTION_VIEW);
+        // toStartView.setClass(getApplicationContext(), toStart);
+        // startActivity(toStartView);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(nextDestination, toStart, null)
+                .setReorderingAllowed(true)
+                .commit();
     }
 
 
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        int viewId = v.getId();
+        // changeView(null, viewId);
+        NavHostController navController = (NavHostController) Navigation.findNavController(this, R.id.fragment_host);
+        switch(viewId){
             case R.id.main_start_deck:
-                changeView(DeckMenu.class);
+                navController.navigate(R.id.deckFragment);
                 break;
             case R.id.main_login:
-                changeView(LoginMenu.class);
+                navController.navigate(R.id.loginFragment);
                 break;
         }
     }

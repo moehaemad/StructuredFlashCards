@@ -20,7 +20,8 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_login_menu, container);
+        // please refer to DeckFragment for explanation why attachToRoot = false
+        View root = inflater.inflate(R.layout.fragment_login_menu, container, false);
         return root;
     }
 }
