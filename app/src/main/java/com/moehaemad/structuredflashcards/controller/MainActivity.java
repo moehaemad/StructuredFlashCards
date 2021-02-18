@@ -53,12 +53,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NavController navController = navHostFragment.getNavController();
 
         //setup the top bar configuration with the nav controller graph and set the drawer layout
-        this.topBarConfig = new  AppBarConfiguration.Builder(navController.getGraph())
+        this.topBarConfig = new  AppBarConfiguration.Builder(R.id.startContent, R.id.deckFragment, R.id.loginFragment)
                                     .setDrawerLayout(drawerLayout).build();
 
         // setup the navigationUI for the navigation drawer using navigation view and nav controller
         NavigationUI.setupActionBarWithNavController(this, navController, this.topBarConfig);
-
         NavigationUI.setupWithNavController(navView, navController);
     }
 

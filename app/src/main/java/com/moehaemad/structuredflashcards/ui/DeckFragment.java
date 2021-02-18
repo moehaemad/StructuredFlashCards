@@ -31,8 +31,8 @@ public class DeckFragment extends Fragment {
         *solution: https://stackoverflow.com/questions/62010915/views-added-to-a-fragmentcontainerview-must-be-associated-with-a-fragment-with*/
         View root = inflater.inflate(R.layout.fragment_deck_start, container, false);
 
-        // This callback will only be called when MyFragment is at least Started.
-        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+/*        // This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true *//* enabled by default *//*) {
             @Override
             public void handleOnBackPressed() {
                 // Handle the back button event
@@ -41,7 +41,7 @@ public class DeckFragment extends Fragment {
                 navController.navigateUp();
             }
         };
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);*/
         return root;
     }
 

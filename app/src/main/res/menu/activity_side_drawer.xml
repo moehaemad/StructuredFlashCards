@@ -3,15 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:checkableBehavior="single">
         <item
+            android:id="@+id/startContent"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/loginFragment"
             android:icon="@drawable/ic_person_black_24dp"
             android:title="@string/menu_user" />
         <item
+            android:id="@+id/deckFragment"
             android:icon="@drawable/ic_build_black_24dp"
-            android:title="@string/menu_user" />
+            android:title="@string/menu_deck" />
     </group>
 </menu>
