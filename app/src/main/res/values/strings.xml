@@ -12,6 +12,10 @@
     <string name="menu_user">User</string>
     <string name="menu_deck">Deck</string>
 
+    <!--    Deck List recycler view    -->
+    <string name="deck_list_default_front">null</string>
+    <string name="deck_list_default_back">null</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_navigation_drawer_title">Structured Flash Cards</string>

@@ -28,7 +28,7 @@ public class DeckFragment extends Fragment {
         /*The attachToRoot is set to false because the root container is the FragmentContainerView
         *   which only allows fragments to be attached to it and not full Views that the
         *   infalter.inflate would give back.
-        *solution: https://stackoverflow.com/questions/62010915/views-added-to-a-fragmentcontainerview-must-be-associated-with-a-fragment-with*/
+        *solution: https://stacko3verflow.com/questions/62010915/views-added-to-a-fragmentcontainerview-must-be-associated-with-a-fragment-with*/
         View root = inflater.inflate(R.layout.fragment_deck_start, container, false);
 
 /*        // This callback will only be called when MyFragment is at least Started.
