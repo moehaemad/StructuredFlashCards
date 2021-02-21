@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.moehaemad.structuredflashcards.R;
@@ -18,17 +19,16 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
     private LinkedList<String> deckData;
     private LayoutInflater viewInflator;
 
-    public DeckRecyclerAdapter (Context appCtx, LinkedList<String> data){
+    public DeckRecyclerAdapter(LinkedList<String> data){
         this.deckData = data;
-        //set the layout inflator to inflate a recycler item as required for onCreateView and changes
-        // this.viewInflator = LayoutInflater.from(appCtx);
+    }
+    public DeckRecyclerAdapter (@Nullable Context appCtx, LinkedList<String> data){
+        super();
 
     }
 
     public class DeckRecyclerViewHolder extends RecyclerView.ViewHolder{
-        /*had to make this variable final because after exiting inner class, this variable will
-        *   not exist as reference.*/
-        public final TextView wordViewText;
+        public TextView wordViewText;
         public DeckRecyclerViewHolder(@NonNull View itemView, DeckRecyclerAdapter adapter){
             super(itemView);
             wordViewText = (TextView) itemView.findViewById(R.id.deck_list_single);
@@ -38,10 +38,12 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
     @Override
     public DeckRecyclerAdapter.DeckRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                          int viewType) {
-        // View deckTextViewInflated = parent.findViewById(R.id.deck_list_single);
-
+        /*setup single item to be inflated and passed to view holder because view holder will
+        *   be expecting the inflated single view. The fragment will already have inflated the
+        *   recycler view so that doesn't need to be inflated*/
         View singleCard = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.deck_list_recycler_item, parent, false);
+
 
         DeckRecyclerViewHolder deckViewHolder = new DeckRecyclerViewHolder(singleCard, this);
         return deckViewHolder;
@@ -49,6 +51,7 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull DeckRecyclerViewHolder holder, int position) {
+        //set value of recycler item
         holder.wordViewText.setText("Some Deck Front Text");
     }
 
