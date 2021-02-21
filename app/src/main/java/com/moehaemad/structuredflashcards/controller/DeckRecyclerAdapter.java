@@ -21,25 +21,29 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
     public DeckRecyclerAdapter (Context appCtx, LinkedList<String> data){
         this.deckData = data;
         //set the layout inflator to inflate a recycler item as required for onCreateView and changes
-        this.viewInflator = LayoutInflater.from(appCtx);
+        // this.viewInflator = LayoutInflater.from(appCtx);
 
     }
 
     public class DeckRecyclerViewHolder extends RecyclerView.ViewHolder{
-
-        public TextView wordViewText;
+        /*had to make this variable final because after exiting inner class, this variable will
+        *   not exist as reference.*/
+        public final TextView wordViewText;
         public DeckRecyclerViewHolder(@NonNull View itemView, DeckRecyclerAdapter adapter){
             super(itemView);
-            this.wordViewText = itemView.findViewById(R.id.deck_list_single);
+            wordViewText = (TextView) itemView.findViewById(R.id.deck_list_single);
         }
     }
     @NonNull
     @Override
     public DeckRecyclerAdapter.DeckRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                          int viewType) {
-        TextView deckTextView = (TextView) this.viewInflator.inflate(
-                R.layout.deck_list_recycler_item, parent, false);
-        DeckRecyclerViewHolder deckViewHolder = new DeckRecyclerViewHolder(deckTextView, this);
+        // View deckTextViewInflated = parent.findViewById(R.id.deck_list_single);
+
+        View singleCard = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.deck_list_recycler_item, parent, false);
+
+        DeckRecyclerViewHolder deckViewHolder = new DeckRecyclerViewHolder(singleCard, this);
         return deckViewHolder;
     }
 
