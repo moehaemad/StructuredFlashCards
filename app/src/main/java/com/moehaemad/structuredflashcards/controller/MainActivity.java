@@ -53,10 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NavController navController = navHostFragment.getNavController();
 
         //setup the top bar configuration with the nav controller graph and set the drawer layout
-        this.topBarConfig = new  AppBarConfiguration.Builder(
-                R.id.startContent, R.id.createCardFragment, R.id.loginFragment, R.id.checkDeckList)
-                                    .setDrawerLayout(drawerLayout)
-                                    .build();
+        this.topBarConfig = new  AppBarConfiguration.Builder(R.id.startContent, R.id.deckFragment, R.id.loginFragment)
+                                    .setDrawerLayout(drawerLayout).build();
 
         // setup the navigationUI for the navigation drawer using navigation view and nav controller
         NavigationUI.setupActionBarWithNavController(this, navController, this.topBarConfig);
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NavHostController navController = (NavHostController) Navigation.findNavController(this, R.id.fragment_host);
         switch(viewId){
             case R.id.main_start_deck:
-                navController.navigate(R.id.createCardFragment);
+                navController.navigate(R.id.deckFragment);
                 break;
             case R.id.main_login:
                 navController.navigate(R.id.loginFragment);
