@@ -14,8 +14,13 @@
             android:icon="@drawable/ic_person_black_24dp"
             android:title="@string/menu_user" />
         <item
-            android:id="@+id/deckFragment"
+            android:id="@+id/createCardFragment"
             android:icon="@drawable/ic_build_black_24dp"
-            android:title="@string/menu_deck" />
+            android:title="@string/menu_card_create" />
+        <item
+            android:id="@+id/checkDeckList"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_deck_view" />
+
     </group>
 </menu>
