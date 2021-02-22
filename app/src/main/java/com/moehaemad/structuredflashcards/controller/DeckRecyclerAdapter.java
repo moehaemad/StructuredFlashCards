@@ -18,20 +18,21 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
                                                                       .DeckRecyclerViewHolder>{
     private LinkedList<String> deckData;
     private LayoutInflater viewInflator;
+    private Context ctx;
 
-    public DeckRecyclerAdapter(LinkedList<String> data){
+    public DeckRecyclerAdapter (@NonNull LinkedList<String> data){
         this.deckData = data;
     }
-    public DeckRecyclerAdapter (@Nullable Context appCtx, LinkedList<String> data){
-        super();
-
+    public DeckRecyclerAdapter (@Nullable Context appCtx, @NonNull LinkedList<String> data){
+        this(data);
+        this.ctx = appCtx;
     }
 
     public class DeckRecyclerViewHolder extends RecyclerView.ViewHolder{
         public TextView wordViewText;
         public DeckRecyclerViewHolder(@NonNull View itemView, DeckRecyclerAdapter adapter){
             super(itemView);
-            wordViewText = (TextView) itemView.findViewById(R.id.deck_list_single);
+            wordViewText = itemView.findViewById(R.id.deck_list_single);
         }
     }
     @NonNull
@@ -57,6 +58,12 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        return this.deckData.size();
+        int size;
+        if (this.deckData == null){
+            size = 0;
+        }else{
+            size = this.deckData.size();
+        }
+        return size;
     }
 }
