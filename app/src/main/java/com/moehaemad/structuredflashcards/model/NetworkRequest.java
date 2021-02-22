@@ -16,10 +16,15 @@ public class NetworkRequest {
     public static Context appContext;
     public RequestQueue requestQueue;
     protected int httpType;
+    private String websiteEndpoint;
 
     public NetworkRequest(Context appContext){
         this.appContext = appContext;
+        //setup volley request queue
         getRequestQueue();
+
+        //load the url to append api endpoint and not to retype domain each time
+        this.websiteEndpoint = "https://moehaemad.ca/structuredFlashCards/";
     }
 
     //create the queue for network calls as per Volley library
@@ -47,14 +52,15 @@ public class NetworkRequest {
 
 
 
-    public void getRequest (String url, final Network <JSONObject> listener){
+    public void getRequest (String endpoint, final Network <JSONObject> listener){
+        this.websiteEndpoint += endpoint;
         Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.i("Network:", "Response worked");
                 JSONObject jsonObject = response;
                 FlashCard.queryResult = response;
-                Log.i("JSON Response", "json");
+                Log.d("JSON Response", "json");
                 listener.getResult(response);
             }
         };
@@ -64,7 +70,9 @@ public class NetworkRequest {
                 Log.i("Network Error", "request failed");
             }
         };
-        this.requestQueue.add(new JsonObjectRequest(this.httpType, url, null,
+        this.requestQueue.add(new JsonObjectRequest(this.httpType,
+                this.websiteEndpoint,
+                null,
                 response, error));
     }
 
