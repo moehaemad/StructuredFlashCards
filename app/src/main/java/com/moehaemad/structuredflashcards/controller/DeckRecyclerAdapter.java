@@ -1,6 +1,7 @@
 package com.moehaemad.structuredflashcards.controller;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
     public DeckRecyclerAdapter (@Nullable Context appCtx, @NonNull LinkedList<String> data){
         this(data);
         this.ctx = appCtx;
+        //not necessarily needed but will consider for calls from other activities
+        this.viewInflator = LayoutInflater.from(appCtx);
     }
 
     public class DeckRecyclerViewHolder extends RecyclerView.ViewHolder{
@@ -58,12 +61,6 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        int size;
-        if (this.deckData == null){
-            size = 0;
-        }else{
-            size = this.deckData.size();
-        }
-        return size;
+        return this.deckData == null ? 0 : this.deckData.size();
     }
 }
