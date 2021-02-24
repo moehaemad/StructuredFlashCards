@@ -57,17 +57,15 @@ public class NetworkRequest {
         Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.i("Network:", "Response worked");
                 JSONObject jsonObject = response;
                 FlashCard.queryResult = response;
-                Log.d("JSON Response", "json");
                 listener.getResult(response);
             }
         };
         Response.ErrorListener error = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("Network Error", "request failed");
+                Log.e("Network Error", "request failed");
             }
         };
         this.requestQueue.add(new JsonObjectRequest(this.httpType,

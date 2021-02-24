@@ -20,30 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/login_menu_submit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="103dp"
-        android:layout_marginEnd="104dp"
-        android:layout_marginBottom="48dp"
-        android:text="@string/login_menu_submit"
-        app:layout_constraintBottom_toTopOf="@+id/login_menu_network_result"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/login_menu_network_result"
-        android:layout_width="166dp"
-        android:layout_height="136dp"
-        android:layout_marginBottom="16dp"
-        android:text="TextView"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/login_menu_username"
@@ -68,6 +44,31 @@
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/login_menu_submit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/login_menu_submit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="103dp"
+        android:layout_marginEnd="104dp"
+        android:layout_marginBottom="48dp"
+        android:text="@string/login_menu_submit"
+        app:layout_constraintBottom_toTopOf="@+id/login_menu_network_result"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/login_menu_network_result"
+        android:layout_width="166dp"
+        android:layout_height="136dp"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
