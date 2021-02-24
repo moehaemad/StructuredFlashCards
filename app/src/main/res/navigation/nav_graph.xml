@@ -8,7 +8,15 @@
         android:id="@+id/startContent"
         android:name="com.moehaemad.structuredflashcards.ui.StartContent"
         android:label="fragment_constraint_login"
-        tools:layout="@layout/fragment_constraint_login" />
+        tools:layout="@layout/fragment_constraint_login" >
+        <action
+            android:id="@+id/action_startContent_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/startContent" />
+        <action
+            android:id="@+id/action_startContent_to_checkDeckList2"
+            app:destination="@id/checkDeckList" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.moehaemad.structuredflashcards.ui.LoginFragment"
@@ -23,5 +31,10 @@
         android:id="@+id/checkDeckList"
         android:name="com.moehaemad.structuredflashcards.ui.CardFragment"
         android:label="fragment_deck_recycler_list"
-        tools:layout="@layout/fragment_deck_recycler_list" />
+        tools:layout="@layout/fragment_deck_recycler_list" >
+        <action
+            android:id="@+id/action_checkDeckList_to_createCardFragment"
+            app:destination="@id/createCardFragment"
+            app:popUpTo="@id/startContent" />
+    </fragment>
 </navigation>
