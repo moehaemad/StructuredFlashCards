@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,10 +18,6 @@ import com.moehaemad.structuredflashcards.R;
 import com.moehaemad.structuredflashcards.controller.UserSetup;
 
 public class LoginFragment extends Fragment {
-
-    public void LoginFragment(){
-    //    TODO: get user input from here
-    }
 
     @Nullable
     @Override
@@ -37,25 +34,21 @@ public class LoginFragment extends Fragment {
     protected View.OnClickListener submitListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.d("onClick button", "the onclick listener is working correctly");
-            //TODO: get username and password EditText values
+            // get user information from login screen
             EditText usernameView = getView().findViewById(R.id.login_menu_username);
             EditText passwordView = getView().findViewById(R.id.login_menu_password);
+
+            //user setup object process in controller
             UserSetup userSetup = new UserSetup(getContext());
-        //    TODO: create an instance of userSetup with the login and password
-            Boolean verification = userSetup.verifyUser(usernameView.getText().toString(),
+            //have controller check for user being verified with text input
+            Boolean verified = userSetup.verifyUser(usernameView.getText().toString(),
                     passwordView.getText().toString());
-        //    TODO: save into bundle
-            Log.d("submit button", "inside of button and verification " + verification.toString());
+
+            //display the appropriate notification for authenticating user
+            Toast userNotif = new Toast(getContext());
+            userNotif.setDuration(Toast.LENGTH_SHORT);
+            userNotif.setText(!verified ? "User Authentication failed" : "User Authentication successful");
+            userNotif.show();
         }
     };
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EditText userInfo = getView().findViewById(R.id.login_menu_username);
-        EditText passInfo = getView().findViewById(R.id.login_menu_password);
-
-
-    }
 }
