@@ -1,5 +1,6 @@
 package com.moehaemad.structuredflashcards.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +18,13 @@ import androidx.fragment.app.Fragment;
 import com.moehaemad.structuredflashcards.R;
 import com.moehaemad.structuredflashcards.controller.UserSetup;
 
+import java.util.LinkedList;
+import java.util.Stack;
+
 public class LoginFragment extends Fragment {
+    private SharedPreferences appPreference;
+    private final String PREF_NAME = "com.moehaemad.structuredflashcards";
+
 
     @Nullable
     @Override
@@ -27,28 +34,57 @@ public class LoginFragment extends Fragment {
         Button submitButton = root.findViewById(R.id.login_menu_submit);
         submitButton.setOnClickListener(this.submitListener);
 
+        //TODO change to user settings instead of login page on createView
+
         return root;
+    }
+
+    //TODO: update the fragment view based on if the user is authenticated
+    //TODO: create method to access shared preferences of USER_LOGIN
+
+    public String[] getUserInput (View v){
+        String[] userInformation = new String[2];
+
+        // get user information from login screen
+        EditText usernameView = getView().findViewById(R.id.login_menu_username);
+        EditText passwordView = getView().findViewById(R.id.login_menu_password);
+        //push onto Stack
+        userInformation [0] = usernameView.getText().toString();
+        userInformation [1] = passwordView.getText().toString();
+
+
+        return userInformation;
+    }
+
+    public void notifyProcess(Boolean verified){
+        //display the appropriate notification for authenticating user
+        Toast userNotify = new Toast(getContext());
+        userNotify.setDuration(Toast.LENGTH_SHORT);
+        userNotify.setText(!verified ? "User Authentication failed"
+                                   : "User Authentication successful");
+        userNotify.show();
     }
 
 
     protected View.OnClickListener submitListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // get user information from login screen
-            EditText usernameView = getView().findViewById(R.id.login_menu_username);
-            EditText passwordView = getView().findViewById(R.id.login_menu_password);
+            String[] userInfo = getUserInput(v);
 
             //user setup object process in controller
             UserSetup userSetup = new UserSetup(getContext());
             //have controller check for user being verified with text input
-            Boolean verified = userSetup.verifyUser(usernameView.getText().toString(),
-                    passwordView.getText().toString());
+            Boolean verified = userSetup.verifyUser(userInfo[0], userInfo[1]);
 
-            //display the appropriate notification for authenticating user
-            Toast userNotif = new Toast(getContext());
-            userNotif.setDuration(Toast.LENGTH_SHORT);
-            userNotif.setText(!verified ? "User Authentication failed" : "User Authentication successful");
-            userNotif.show();
+            notifyProcess(verified);
+        }
+    };
+
+    protected View.OnClickListener createAccountClick = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            String[] userInfo = getUserInput(v);
+
         }
     };
 }
