@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">Structured Flash Cards</string>
     <string name="title_activity_deck_menu">DeckMenu</string>
+
+    <!--    LOGIN MENU     -->
     <string name="login_menu_title"><u>Login Menu</u></string>
     <string name="login_menu_username">Username</string>
     <string name="login_menu_pass">Password</string>
     <string name="login_menu_submit">Submit</string>
+    <string name="login_menu_create">Create Account</string>
 
     <!--    MENU ITEMS     -->
     <string name="menu_home">Home</string>
