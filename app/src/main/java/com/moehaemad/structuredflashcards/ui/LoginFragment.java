@@ -41,8 +41,6 @@ public class LoginFragment extends Fragment {
         return root;
     }
 
-    //TODO: update the fragment view based on if the user is authenticated
-    //TODO: create method to access shared preferences of USER_LOGIN
 
     public String[] getUserInput (View v){
         String[] userInformation = new String[2];
@@ -66,7 +64,7 @@ public class LoginFragment extends Fragment {
             userNotification = "User Authentication failed";
         }
         //display the appropriate notification for authenticating user
-        Toast.makeText(getContext(), userNotification, Toast.LENGTH_SHORT);
+        Toast.makeText(getContext(), userNotification, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -91,7 +89,9 @@ public class LoginFragment extends Fragment {
             String[] userInfo = getUserInput(v);
             //create setup
             UserSetup userSetup = new UserSetup(getContext());
-            userSetup.createUser(userInfo[0], userInfo[1]);
+            Boolean verified = userSetup.createUser(userInfo[0], userInfo[1]);
+            notifyProcess(verified);
+
         }
     };
 }
