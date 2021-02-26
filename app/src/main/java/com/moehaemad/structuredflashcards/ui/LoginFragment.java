@@ -57,13 +57,16 @@ public class LoginFragment extends Fragment {
     }
 
     public void notifyProcess(Boolean verified){
+        String userNotification = "";
+        if (verified){
+            userNotification = "User Authentication successful";
+        }else{
+            userNotification = "User Authentication failed";
+        }
         //display the appropriate notification for authenticating user
-        Toast userNotify = new Toast(getContext());
-        userNotify.setDuration(Toast.LENGTH_SHORT);
-        userNotify.setText(!verified ? "User Authentication failed"
-                                   : "User Authentication successful");
-        userNotify.show();
+        Toast.makeText(getContext(), userNotification, Toast.LENGTH_SHORT);
     }
+
 
 
     protected View.OnClickListener submitListener = new View.OnClickListener() {
