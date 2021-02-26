@@ -39,6 +39,8 @@ public class NetworkRequest implements Response.Listener<JSONObject>{
         switch(http){
             case "GET":
                 return Request.Method.GET;
+            case "POST":
+                return Request.Method.POST;
             case "PUT":
                 return Request.Method.PUT;
             case "DELETE":

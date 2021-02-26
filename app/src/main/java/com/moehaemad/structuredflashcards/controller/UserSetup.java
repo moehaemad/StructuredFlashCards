@@ -70,7 +70,20 @@ public class UserSetup {
     };
 
     public Boolean createUser (String login, String pass){
-
+        NetworkRequest createLogin = this.networkRequest;
+        int method = createLogin.getMethod("POST");
+        try{
+            JSONObject postData = new JSONObject("{username:" + login + ", password:" + pass + "}");
+            String endpoint = this.websiteEndpoint + "createUser";
+            createLogin.addToRequestQueue(new JsonObjectRequest(
+                    endpoint,
+                    postData,
+                    new UserVerificationResponse(),
+                    new ErrorResponse()
+            ));
+        }catch(JSONException e){
+            Log.e("usersetup create post", e.getMessage());
+        }
         return false;
     }
 
