@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.moehaemad.structuredflashcards.model.NetworkRequest;
+import com.moehaemad.structuredflashcards.model.WebsiteInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,11 +17,9 @@ import org.json.JSONObject;
 import java.util.Map;
 
 public class UserSetup {
-    private final String USER_VERIFIED = "USER_VERIFICATION";
 
     private SharedPreferences appPreferences;
     private String preferenceName = "com.moehaemad.structuredflashcards";
-    private String websiteEndpoint = "https://moehaemad.ca/structuredFlashCards/";
     private NetworkRequest networkRequest;
 
     public UserSetup (Context appCtx){
@@ -36,7 +35,8 @@ public class UserSetup {
             SharedPreferences.Editor prefEditor = appPreferences.edit();
 
             try{
-                prefEditor.putBoolean(USER_VERIFIED, response.getBoolean("result"));
+                prefEditor.putBoolean(WebsiteInterface.USER_VALIDATED,
+                        response.getBoolean("result"));
                 prefEditor.apply();
                 Log.d("response object", response.toString());
             }catch(JSONException e) {
@@ -52,12 +52,17 @@ public class UserSetup {
         }
     }
 
+    public void syncUserToApp (String user) {
+        SharedPreferences.Editor preferenceEditor = this.appPreferences.edit();
+        preferenceEditor.putString(WebsiteInterface.USER_NAME, user);
+    }
+
     public Boolean verifyUser (String login, String pass){
         //create network request with app context
         NetworkRequest checkUser = this.networkRequest;
         //get method for HTTP type and set where to send request
         int method = checkUser.getMethod("GET");
-        String endpoint = this.websiteEndpoint + "checkuser/" + login + "/" + pass;
+        String endpoint = WebsiteInterface.CHECK_USER + login + "/" + pass;
 
         //user addToRequestQueue instead of having NetworkRequest do implementation
         checkUser.addToRequestQueue(new JsonObjectRequest(method,
@@ -78,7 +83,7 @@ public class UserSetup {
             JSONObject postData = new JSONObject();
             postData.put("username", login);
             postData.put("pass", pass);
-            String endpoint = this.websiteEndpoint + "createUser";
+            String endpoint = WebsiteInterface.CREATE_USER;
             createLogin.addToRequestQueue(new JsonObjectRequest(
                     endpoint,
                     postData,
@@ -95,7 +100,8 @@ public class UserSetup {
         //check whether the website result was verified and return the result accordingly
         Boolean jsonResult;
 
-        jsonResult = this.appPreferences.getBoolean(USER_VERIFIED, false);
+        jsonResult = this.appPreferences.getBoolean(WebsiteInterface.USER_VALIDATED,
+                false);
         //make sure the webResult was atleast given
         Log.d("checkWebsiteAuth", "query " + jsonResult.toString());
         return jsonResult;
