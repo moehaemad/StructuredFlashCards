@@ -1,4 +1,4 @@
-package com.moehaemad.structuredflashcards.model;
+package com.moehaemad.structuredflashcards.controller;
 
 
 import android.content.Context;
@@ -6,6 +6,8 @@ import com.android.volley.RequestQueue;
 
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class FlashCard{
     private static Context appContext;
@@ -18,6 +20,14 @@ public class FlashCard{
         this.question = "";
         this.answer = "";
         this.appContext = appContext;
+    }
+
+    public interface Card {
+        HashMap< String, String> fullCard = new HashMap<String, String>();
+
+        public void setMethod();
+
+        public String getFullCard();
     }
 
 
