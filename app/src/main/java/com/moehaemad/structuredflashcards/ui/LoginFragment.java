@@ -33,6 +33,8 @@ public class LoginFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_login_menu, container, false);
         Button submitButton = root.findViewById(R.id.login_menu_submit);
         submitButton.setOnClickListener(this.submitListener);
+        Button createUserButton = root.findViewById(R.id.login_menu_create_user);
+        createUserButton.setOnClickListener(createAccountClick);
 
         //TODO change to user settings instead of login page on createView
 
@@ -87,7 +89,9 @@ public class LoginFragment extends Fragment {
         @Override
         public void onClick(View v) {
             String[] userInfo = getUserInput(v);
-
+            //create setup
+            UserSetup userSetup = new UserSetup(getContext());
+            userSetup.createUser(userInfo[0], userInfo[1]);
         }
     };
 }

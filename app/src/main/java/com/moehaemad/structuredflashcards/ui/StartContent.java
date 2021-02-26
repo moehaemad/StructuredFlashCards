@@ -23,4 +23,6 @@ public class StartContent extends Fragment {
         // please refer to DeckFragment for explanation why attachToRoot = false
         return inflater.inflate(R.layout.fragment_constraint_login, container, false);
     }
+    /*TODO: update the home view by setting the text of buttons and functionality to refer to User
+       settings*/
 }

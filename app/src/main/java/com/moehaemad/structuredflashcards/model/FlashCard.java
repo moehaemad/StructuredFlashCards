@@ -12,12 +12,6 @@ public class FlashCard{
     private int id;
     private String question;
     private String answer;
-    private RequestQueue requestQueue;
-    private int httpType;
-    public static JSONObject queryResult;
-
-
-    //TODO: clear away methods for network requests and reorganize for just Flash Card info
 
     public FlashCard(Context appContext){
         this.id=0;
@@ -34,7 +28,13 @@ public class FlashCard{
         this.answer = answer;
     }
 
+    public String getFront(int id){
+        return this.question;
+    }
 
+    public String getBack(int id){
+        return this.answer;
+    }
 
 
 

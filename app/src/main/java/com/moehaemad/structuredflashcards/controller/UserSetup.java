@@ -13,6 +13,8 @@ import com.moehaemad.structuredflashcards.model.NetworkRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class UserSetup {
     private final String USER_VERIFIED = "USER_VERIFICATION";
 
@@ -36,7 +38,7 @@ public class UserSetup {
             try{
                 prefEditor.putBoolean(USER_VERIFIED, response.getBoolean("result"));
                 prefEditor.apply();
-
+                Log.d("response object", response.toString());
             }catch(JSONException e) {
                 Log.e("user webverif resp", e.getMessage());
             }
@@ -73,7 +75,9 @@ public class UserSetup {
         NetworkRequest createLogin = this.networkRequest;
         int method = createLogin.getMethod("POST");
         try{
-            JSONObject postData = new JSONObject("{username:" + login + ", password:" + pass + "}");
+            JSONObject postData = new JSONObject();
+            postData.put("username", login);
+            postData.put("pass", pass);
             String endpoint = this.websiteEndpoint + "createUser";
             createLogin.addToRequestQueue(new JsonObjectRequest(
                     endpoint,
@@ -84,7 +88,7 @@ public class UserSetup {
         }catch(JSONException e){
             Log.e("usersetup create post", e.getMessage());
         }
-        return false;
+        return checkWebsiteAuth();
     }
 
     private Boolean checkWebsiteAuth (){
