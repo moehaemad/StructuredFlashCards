@@ -1,10 +1,13 @@
 package com.moehaemad.structuredflashcards.model;
 
-public interface WebsiteInterface {
-    String USER_VALIDATED = "USER_VERIFIATION";
-    String USER_NAME = "USER_NAME";
+import com.android.volley.Response;
 
-    String PRODUCTION = "https://moehaemad.ca/structuredFlashCards/";
+public interface WebsiteInterface {
+    String USER_VALIDATED = Preferences.USER_VALIDATED;
+    String USER_NAME = Preferences.USER_NAME;
+
+//    String PRODUCTION = "https://moehaemad.ca/structuredFlashCards/";
+    String PRODUCTION = "http://localhost:3000/";
     String CREATE_USER = PRODUCTION + "createUser";
     String CREATE_DECK = PRODUCTION + "createDeck";
     String CREATE_CARD = PRODUCTION + "createCard";
@@ -18,6 +21,7 @@ public interface WebsiteInterface {
 
 
     Boolean checkWebsiteAuth();
+
 
 
 }
