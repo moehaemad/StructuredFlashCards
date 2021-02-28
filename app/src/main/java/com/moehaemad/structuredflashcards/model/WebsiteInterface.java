@@ -3,6 +3,8 @@ package com.moehaemad.structuredflashcards.model;
 public interface WebsiteInterface {
     String USER_VALIDATED = Preferences.USER_VALIDATED;
     String USER_NAME = Preferences.USER_NAME;
+    String DECK_ARRAY = Preferences.DECK_ARRAY;
+
 
 //    String PRODUCTION = "https://moehaemad.ca/structuredFlashCards/";
     String PRODUCTION = "http://192.168.1.65:3000/structuredFlashCards/";

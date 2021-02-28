@@ -13,14 +13,13 @@ import com.moehaemad.structuredflashcards.model.NetworkRequest;
 import com.moehaemad.structuredflashcards.model.Preferences;
 import com.moehaemad.structuredflashcards.model.WebsiteInterface;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 public class Deck {
     private String username;
-    private int[] deckIds;
-    private HashMap<Integer, String> deck;
+    private JSONArray deckArray;
     private SharedPreferences sharedPreferences;
     private Context ctx;
 
@@ -32,8 +31,8 @@ public class Deck {
     public Deck(@NonNull Context ctx, @NonNull  String username){
         this(ctx);
         this.username = username;
-        this.deckIds = getDeckIds();
-        pairDeckIdNames();
+        syncDeck();
+        setDeck();
     }
 
     class GetDeckResponse implements Response.Listener<JSONObject>{
@@ -43,6 +42,12 @@ public class Deck {
             Log.d("Deck response", response.toString());
             //TODO: put the list of deck id's in here
             //TODO: check the output received as JSON request
+            try{
+                prefEditor.putString(Preferences.DECK_ARRAY, response.get("ids").toString());
+                Log.d("deckArray", deckArray.toString());
+            }catch(JSONException e){
+                Log.e("Deck json error", e.getMessage());
+            }
             prefEditor.apply();
         }
     }
@@ -54,10 +59,9 @@ public class Deck {
         }
     };
 
-
-    private int[] getDeckIds(){
-    //    TODO: query database for array of deck ids attached to a user using user id
-    //    TODO: create networkRequest object and retrieve the json data which will contain ids
+    public void syncDeck(){
+        //    TODO: query database for array of deck ids attached to a user using user id
+        //    TODO: create networkRequest object and retrieve the json data which will contain ids
         //create network request for GEt
         NetworkRequest networkRequest = new NetworkRequest(this.ctx);
         int method = networkRequest.getMethod("GET");
@@ -69,26 +73,24 @@ public class Deck {
                 null,
                 new GetDeckResponse(),
                 error));
-        int[] ids = {};
-        return ids;
+    }
+
+    private void setDeck(){
+        String decks = this.sharedPreferences.getString(Preferences.DECK_ARRAY, "[]");
+        if (decks  == "[]"){
+            this.deckArray = new JSONArray();
+        }else{
+            try {
+                this.deckArray = new JSONArray(decks);
+            } catch (JSONException e) {
+                Log.e("setting deck ids", e.getMessage());
+            }
+        }
+    }
+
+
+    private JSONArray getDeckIds(){
+        return this.deckArray == null ? new JSONArray() : this.deckArray;
     };
-
-
-
-    private void pairDeckIdNames(){
-        //TODO: for each item in the deck id arrays attach the associated name to the hashmap
-        //TODO: take the data from getDeckIds and associate them to a HasMap 'deck' object
-        //TODO: consider reading from bundle or something that can be retained without preferences
-        String websiteResponse = this.sharedPreferences.getString("id", "[]");
-        //turn the string into an array for deck ids
-        String[] ids = websiteResponse.split(", ");
-
-    }
-
-    protected HashMap<Integer, String> getDecks(){
-        //TODO: pair each deck id to it's associated string
-        return this.deck;
-    }
-
 
 }
