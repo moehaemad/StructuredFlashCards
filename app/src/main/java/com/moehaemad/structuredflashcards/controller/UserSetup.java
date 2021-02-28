@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.moehaemad.structuredflashcards.model.NetworkRequest;
+import com.moehaemad.structuredflashcards.model.Preferences;
 import com.moehaemad.structuredflashcards.model.WebsiteInterface;
 
 import org.json.JSONException;
@@ -19,14 +20,41 @@ import java.util.Map;
 public class UserSetup {
 
     private SharedPreferences appPreferences;
-    private String preferenceName = "com.moehaemad.structuredflashcards";
     private NetworkRequest networkRequest;
+    private String login = "";
+    private String password = "";
+    private Deck userDecks;
 
-    public UserSetup (Context appCtx){
+    public UserSetup(Context appCtx){
         //setup sharedPreferences for user information
-        this.appPreferences = appCtx.getSharedPreferences(this.preferenceName, Context.MODE_PRIVATE);
+        this.appPreferences = appCtx.getSharedPreferences(Preferences.PACKAGE,
+                Context.MODE_PRIVATE);
         //initialize only once for request
         this.networkRequest = new NetworkRequest(appCtx);
+        //grab the username from system preferences
+        String username = this.appPreferences.getString(WebsiteInterface.USER_NAME,
+                "");
+        //if constructing somewhere not from login then check shared preferences for stored login
+        if (username == "" ){
+            this.userDecks = new Deck(appCtx);
+        }else{
+            this.userDecks = new Deck (appCtx, username);
+        }
+
+    }
+
+    public UserSetup (Context appCtx, String login, String password){
+        this(appCtx);
+
+        //set login and password
+        this.login = login;
+        this.password = password;
+
+        //check if username passed and then override the deck object with new one given login passed
+        //only check if not  "", otherwise previous constructor will have initialized
+        if (this.login != ""){
+            this.userDecks = new Deck (appCtx, this.login);
+        }
     }
 
     class UserVerificationResponse implements Response.Listener<JSONObject>{
@@ -38,7 +66,8 @@ public class UserSetup {
                 prefEditor.putBoolean(WebsiteInterface.USER_VALIDATED,
                         response.getBoolean("result"));
                 prefEditor.apply();
-                Log.d("response object", response.toString());
+                syncUserToApp();
+                Log.d("Usersetup resp object", response.toString());
             }catch(JSONException e) {
                 Log.e("user webverif resp", e.getMessage());
             }
@@ -48,24 +77,37 @@ public class UserSetup {
     class ErrorResponse implements Response.ErrorListener{
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.e("Network Error", "request failed");
+            Log.e("Network Error", error.getMessage());
         }
     }
 
-    public void syncUserToApp (String user) {
+    public void syncUserToApp () {
         SharedPreferences.Editor preferenceEditor = this.appPreferences.edit();
-        preferenceEditor.putString(WebsiteInterface.USER_NAME, user);
+        preferenceEditor.putString(WebsiteInterface.USER_NAME, this.login);
+        preferenceEditor.apply();
     }
 
-    public Boolean verifyUser (String login, String pass){
+    public Deck getUserDecks() {
+        return this.userDecks;
+    }
+
+    public void checkEmptyLogin (){
+        if (this.login == "" || this.password == ""){
+            throw new Error("Error in login: no username or password");
+        }
+    }
+
+    public Boolean verifyUser (){
+        checkEmptyLogin();
         //create network request with app context
         NetworkRequest checkUser = this.networkRequest;
         //get method for HTTP type and set where to send request
         int method = checkUser.getMethod("GET");
-        String endpoint = WebsiteInterface.CHECK_USER + login + "/" + pass;
+        String endpoint = WebsiteInterface.CHECK_USER + this.login + "/" + this.password;
 
         //user addToRequestQueue instead of having NetworkRequest do implementation
-        checkUser.addToRequestQueue(new JsonObjectRequest(method,
+        checkUser.addToRequestQueue(new JsonObjectRequest(
+                method,
                 endpoint,
                 null,
                 new UserVerificationResponse(),
@@ -76,15 +118,17 @@ public class UserSetup {
         return checkWebsiteAuth();
     };
 
-    public Boolean createUser (String login, String pass){
+    public Boolean createUser (){
+        checkEmptyLogin();
         NetworkRequest createLogin = this.networkRequest;
         int method = createLogin.getMethod("POST");
         try{
             JSONObject postData = new JSONObject();
-            postData.put("username", login);
-            postData.put("pass", pass);
+            postData.put("username", this.login);
+            postData.put("pass", this.password);
             String endpoint = WebsiteInterface.CREATE_USER;
             createLogin.addToRequestQueue(new JsonObjectRequest(
+                    method,
                     endpoint,
                     postData,
                     new UserVerificationResponse(),
