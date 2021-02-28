@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -16,9 +18,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class Deck {
-    private String name;
-    private int id;
-    private int[] deckId;
+    private String username;
+    private int[] deckIds;
     private HashMap<Integer, String> deck;
     private SharedPreferences sharedPreferences;
     private Context ctx;
@@ -28,11 +29,10 @@ public class Deck {
         this.ctx = ctx;
     }
 
-    public Deck(Context ctx, String name, int id){
+    public Deck(@NonNull Context ctx, @NonNull  String username){
         this(ctx);
-        this.name = name;
-        this.id = id;
-        this.deckId = getDeckIds();
+        this.username = username;
+        this.deckIds = getDeckIds();
         pairDeckIdNames();
     }
 
@@ -40,6 +40,7 @@ public class Deck {
         @Override
         public void onResponse(JSONObject response) {
             SharedPreferences.Editor prefEditor = sharedPreferences.edit();
+            Log.d("Deck response", response.toString());
             //TODO: put the list of deck id's in here
             //TODO: check the output received as JSON request
             prefEditor.apply();
@@ -49,7 +50,7 @@ public class Deck {
     private Response.ErrorListener error = new Response.ErrorListener(){
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.e("Netork error", "Deck.java get ids");
+            Log.e("Network error", "Deck.java get ids");
         }
     };
 
@@ -62,11 +63,12 @@ public class Deck {
         int method = networkRequest.getMethod("GET");
 
         //construct JSONobjectrequest for queue
-        networkRequest.addToRequestQueue(new JsonObjectRequest(method,
-                WebsiteInterface.GET_DECKS,
+        networkRequest.addToRequestQueue(new JsonObjectRequest(
+                method,
+                WebsiteInterface.GET_DECKS + this.username,
                 null,
                 new GetDeckResponse(),
-                null));
+                error));
         int[] ids = {};
         return ids;
     };
