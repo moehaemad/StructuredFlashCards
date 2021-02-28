@@ -25,6 +25,13 @@ public class LoginFragment extends Fragment {
     private SharedPreferences appPreference;
     private final String PREF_NAME = "com.moehaemad.structuredflashcards";
 
+    private static String login = "" ;
+    private static String password = "";
+    protected UserSetup userSetup;
+    private View rootView;
+
+
+
 
     @Nullable
     @Override
@@ -42,21 +49,18 @@ public class LoginFragment extends Fragment {
     }
 
 
-    public String[] getUserInput (View v){
-        String[] userInformation = new String[2];
-
+    public void setUserInput (View v){
         // get user information from login screen
         EditText usernameView = getView().findViewById(R.id.login_menu_username);
         EditText passwordView = getView().findViewById(R.id.login_menu_password);
-        //push onto Stack
-        userInformation [0] = usernameView.getText().toString();
-        userInformation [1] = passwordView.getText().toString();
 
-
-        return userInformation;
+        // set username information
+        this.login = usernameView.getText().toString();
+        this.password = passwordView.getText().toString();
+        this.userSetup = new UserSetup(getContext(), this.login, this.password);
     }
 
-    public void notifyProcess(Boolean verified){
+    public void notifyProcess(@NonNull Boolean verified){
         String userNotification = "";
         if (verified){
             userNotification = "User Authentication successful";
@@ -72,12 +76,10 @@ public class LoginFragment extends Fragment {
     protected View.OnClickListener submitListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String[] userInfo = getUserInput(v);
-
-            //user setup object process in controller
-            UserSetup userSetup = new UserSetup(getContext());
+            //get the editText input if changed from construction; most likely changed
+            setUserInput(v);
             //have controller check for user being verified with text input
-            Boolean verified = userSetup.verifyUser(userInfo[0], userInfo[1]);
+            Boolean verified = userSetup.verifyUser();
 
             notifyProcess(verified);
         }
@@ -86,10 +88,9 @@ public class LoginFragment extends Fragment {
     protected View.OnClickListener createAccountClick = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            String[] userInfo = getUserInput(v);
-            //create setup
-            UserSetup userSetup = new UserSetup(getContext());
-            Boolean verified = userSetup.createUser(userInfo[0], userInfo[1]);
+            //get the editText input if changed from construction; most likely changed
+            setUserInput(v);
+            Boolean verified = userSetup.createUser();
             notifyProcess(verified);
 
         }
