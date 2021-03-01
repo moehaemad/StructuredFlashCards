@@ -13,18 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.moehaemad.structuredflashcards.R;
 
+import org.json.JSONObject;
+
 import java.util.LinkedList;
 
 public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapter
                                                                       .DeckRecyclerViewHolder>{
-    private LinkedList<String> deckData;
+    private LinkedList<JSONObject> deckData;
     private LayoutInflater viewInflator;
     private Context ctx;
 
-    public DeckRecyclerAdapter (@NonNull LinkedList<String> data){
+    public DeckRecyclerAdapter (@NonNull LinkedList<JSONObject> data){
         this.deckData = data;
     }
-    public DeckRecyclerAdapter (@Nullable Context appCtx, @NonNull LinkedList<String> data){
+    public DeckRecyclerAdapter (@Nullable Context appCtx, @NonNull LinkedList<JSONObject> data){
         this(data);
         this.ctx = appCtx;
         //not necessarily needed but will consider for calls from other activities

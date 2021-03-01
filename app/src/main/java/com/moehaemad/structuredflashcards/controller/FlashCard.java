@@ -115,7 +115,7 @@ public class FlashCard{
             //the array contains a size of the number of cards and each card has a front and back
             LinkedList<JSONObject> toReturn = new LinkedList<JSONObject>();
 
-            for (int i=0, size = listOfCards.length(); i <= size; i++){
+            for (int i=0, size = listOfCards.length(); i < size; i++){
                 //iterate through json array
                 //construct a JSON object from each index of JSON array
                 JSONObject card = (JSONObject) listOfCards.get(i);
