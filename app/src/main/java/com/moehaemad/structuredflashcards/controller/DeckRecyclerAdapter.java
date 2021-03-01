@@ -2,6 +2,7 @@ package com.moehaemad.structuredflashcards.controller;
 
 import android.content.Context;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.moehaemad.structuredflashcards.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -58,7 +60,12 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull DeckRecyclerViewHolder holder, int position) {
         //set value of recycler item
-        holder.wordViewText.setText("Some Deck Front Text");
+        try {
+            //get data at position from linkedlist, access the front of card and turn to text
+            holder.wordViewText.setText(this.deckData.get(position).get("front").toString());
+        } catch (JSONException e) {
+            Log.e("deckrecycler settext", e.getMessage());
+        }
     }
 
     @Override
