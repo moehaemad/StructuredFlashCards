@@ -37,9 +37,27 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
 
     public class DeckRecyclerViewHolder extends RecyclerView.ViewHolder{
         public TextView wordViewText;
+        public DeckRecyclerAdapter adapter;
+        public JSONObject card;
         public DeckRecyclerViewHolder(@NonNull View itemView, DeckRecyclerAdapter adapter){
             super(itemView);
+            this.adapter = adapter;
             wordViewText = itemView.findViewById(R.id.deck_list_single);
+            itemView.setOnClickListener(toggleCardFace);
+        }
+
+        protected View.OnClickListener toggleCardFace = new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                try{
+                wordViewText.setText(card.getString("back"));
+                }catch (JSONException e){
+                    Log.e("cardViewholder json", e.getMessage());
+                }
+            }
+        };
+        public void setJSONCard(JSONObject obj){
+            this.card = obj;
         }
     }
     @NonNull
@@ -61,8 +79,10 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
     public void onBindViewHolder(@NonNull DeckRecyclerViewHolder holder, int position) {
         //set value of recycler item
         try {
+            //set the card at the position of linkedlist as json object for onclicklistener
+            holder.setJSONCard(this.deckData.get(position));
             //get data at position from linkedlist, access the front of card and turn to text
-            holder.wordViewText.setText(this.deckData.get(position).get("front").toString());
+            holder.wordViewText.setText(this.deckData.get(position).getString("front"));
         } catch (JSONException e) {
             Log.e("deckrecycler settext", e.getMessage());
         }

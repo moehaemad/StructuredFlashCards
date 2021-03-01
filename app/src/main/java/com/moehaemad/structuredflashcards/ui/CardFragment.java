@@ -36,12 +36,6 @@ public class CardFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.deckDataWeb = new LinkedList<JSONObject>();
-        //TODO: grab data from UserSetup.java for the website request or as conditional with Bundle
-        try {
-            this.deckDataWeb.add(new JSONObject("{\"front\": \"working\", \"back\": \"working\"}"));
-        } catch (JSONException e) {
-            Log.e("cardfragment json", e.getMessage());
-        }
         this.sharedPreferences = getContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
     }
 
@@ -52,15 +46,11 @@ public class CardFragment extends Fragment {
 
         //setup adapter here because of different fragment lifecycle as opposed to activities
 
-        //TODO: create FlashCard object and have it setup the ids into sharedpreferences
-
         //TODO: grab the id from user which will be another recycler view in the deckView
         //this is hardcoded for now, it will setup the cards into the shared preferences
         //TODO: create a test for this or  particular use case
+        //TODO: remove hardcoded id
         FlashCard flashCard = new FlashCard(getContext(), 3);
-
-        //setup a new flash card object with the front and back text to display on recycler view
-
 
         //insert the card into the linkedlist
         LinkedList<JSONObject> cards = flashCard.getCards();

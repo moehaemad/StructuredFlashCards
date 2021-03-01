@@ -77,7 +77,7 @@ public class Deck {
 
     private void setDeck(){
         String decks = this.sharedPreferences.getString(Preferences.DECK_ARRAY, "[]");
-        if (decks  == "[]"){
+        if (decks.equals("[]")){
             this.deckArray = new JSONArray();
         }else{
             try {
