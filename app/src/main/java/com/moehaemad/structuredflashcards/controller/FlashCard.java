@@ -13,13 +13,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.moehaemad.structuredflashcards.model.NetworkRequest;
 import com.moehaemad.structuredflashcards.model.Preferences;
 import com.moehaemad.structuredflashcards.model.WebsiteInterface;
+import com.moehaemad.structuredflashcards.ui.DeckFragment;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public class FlashCard{
@@ -39,37 +39,36 @@ public class FlashCard{
         setupCards();
     }
 
-    public FlashCard (Context appContext, int id, String question, String answer){
+    public FlashCard (Context appContext, @NonNull int id, @NonNull String question, @NonNull String answer){
         this(appContext, id);
         this.id = id;
         this.question = question;
         this.answer = answer;
     }
 
-    public interface Card {
-        HashMap< String, String> fullCard = new HashMap<String, String>();
-
-        public void setMethod();
-
-        public String getFullCard();
-    }
-    class CardResponse implements Response.Listener<JSONObject>{
+    private Response.Listener<JSONObject> storeWebCards = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
             try {
-            SharedPreferences.Editor prefEditor = sharedPreferences.edit();
-            //store the cards array and append the deck id
-            prefEditor.putString(Preferences.CARDS_ARRAY + "_" + String.valueOf(id),
-                        response.get("cards").toString());
-            Log.d("FlashCard resp", response.toString());
-            prefEditor.apply();
-            
+                changePreferences(
+                        Preferences.CARDS_ARRAY + "_" + String.valueOf(id),
+                        response.get("cards").toString()
+                );
+                Log.d("FlashCard storeWebCards", response.toString());
+
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e("flashcard insertcards", e.getMessage());
             }
         }
-    }
+    };
 
+    private void changePreferences (String prefItem, String prefValue){
+        //TODO: get previous value of sharedpreferences and append
+        SharedPreferences.Editor prefEditor = sharedPreferences.edit();
+        //store the cards array and append the deck id
+        prefEditor.putString(prefItem, prefValue);
+        prefEditor.apply();
+    }
 
 
     private Response.ErrorListener error = new Response.ErrorListener() {
@@ -87,14 +86,44 @@ public class FlashCard{
         return this.answer;
     }
 
+    public void createCard(final DeckFragment.Verified verification){
+        //will not be able to create without instantiating constructor with question/answer values
+        Response.Listener<JSONObject> createCard = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    verification.result(response.getBoolean("result"));
+                } catch (JSONException e) {
+                    Log.e("Flash Card createCard", e.getMessage());
+                }
+            }
+        };
+        NetworkRequest networkRequest = new NetworkRequest(this.appContext);
+        String api = WebsiteInterface.CREATE_CARD;
+        int method = networkRequest.getMethod("POST");
+        try {
+            JSONObject toPost = new JSONObject(
+                    "{\"id\": "+ id + ", \"front\": "+ question + ", \"back\": "+ answer + "}"
+            );
+            networkRequest.addToRequestQueue(new JsonObjectRequest(
+                    method,
+                    api,
+                    toPost,
+                    createCard,
+                    error
+            ));
+        } catch (JSONException e) {
+            Log.e("FlashCard insertcard", e.getMessage());
+        }
+    }
+
     private void setupCards(){
         NetworkRequest networkRequest = new NetworkRequest(this.appContext);
         String website = WebsiteInterface.GET_CARDS + String.valueOf(this.id);
-
         networkRequest.addToRequestQueue(new JsonObjectRequest(
                 website,
                 null,
-                new CardResponse(),
+                storeWebCards,
                 error));
     }
 
