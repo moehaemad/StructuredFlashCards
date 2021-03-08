@@ -22,6 +22,7 @@ import com.moehaemad.structuredflashcards.model.UserInput;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.LinkedList;
 
@@ -105,7 +106,6 @@ public class DeckFragment extends Fragment implements UserInput {
         //TODO: if id null then use createFromResource of ArrayAdapter
         //if null then use strings from strings.xml
         LinkedList<String> strings = setDeckIdsToString();
-        strings.add("something");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter(
                 getContext(),
                 R.layout.deck_view_id_spinner,
@@ -119,18 +119,24 @@ public class DeckFragment extends Fragment implements UserInput {
     private LinkedList<String> setDeckIdsToString(){
         //create deck class
         Deck mDeck = new Deck(getContext());
-        //get the ids as a json array
+        //get the ids as a json array from Deck
         JSONArray jsonArray = mDeck.getDeckIds();
         LinkedList<String> deckIdString = new LinkedList<>();
         try{
             for (int i=0, size=jsonArray.length(); i < size; i++){
-                deckIdString.add(jsonArray.getString(i));
+                //array is of json objects so get object in array index
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                //set the string of the id property as a string for deck ids
+                deckIdString.add(jsonObject.getString("id"));
             }
             return deckIdString;
 
         }catch(JSONException e){
             Log.e("Spinner setJSONArray", e.getMessage());
         }
+        //if null then use strings from strings.xml
+        String[] stringArray = getResources().getStringArray(R.array.deck_spinner);
+        deckIdString.add(stringArray[0]);
         return deckIdString;
     };
 

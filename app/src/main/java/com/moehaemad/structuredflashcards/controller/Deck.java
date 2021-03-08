@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,13 +27,15 @@ public class Deck {
     public Deck(Context ctx){
         this.sharedPreferences = ctx.getSharedPreferences(Preferences.PACKAGE, Context.MODE_PRIVATE);
         this.ctx = ctx;
+        //set the class variable to include these ids
+        setDeck();
     }
 
     public Deck(@NonNull Context ctx, @NonNull  String username){
         this(ctx);
         this.username = username;
+        //make a network request to get the ids
         syncDeck();
-        setDeck();
     }
 
     class GetDeckResponse implements Response.Listener<JSONObject>{
@@ -44,6 +47,7 @@ public class Deck {
             //TODO: check the output received as JSON request
             try{
                 prefEditor.putString(Preferences.DECK_ARRAY, response.get("ids").toString());
+                Log.d("Deck ids", response.get("ids").toString());
                 Log.d("deckArray", deckArray.toString());
             }catch(JSONException e){
                 Log.e("Deck json error", e.getMessage());
@@ -59,10 +63,9 @@ public class Deck {
         }
     };
 
+
     public void syncDeck(){
-        //    TODO: query database for array of deck ids attached to a user using user id
-        //    TODO: create networkRequest object and retrieve the json data which will contain ids
-        //create network request for GEt
+        //create network request for GET of the ids
         NetworkRequest networkRequest = new NetworkRequest(this.ctx);
         int method = networkRequest.getMethod("GET");
 
@@ -76,10 +79,13 @@ public class Deck {
     }
 
     private void setDeck(){
+        //get deck ids from shared preferences
         String decks = this.sharedPreferences.getString(Preferences.DECK_ARRAY, "[]");
+        //if none exist set the deck ids for this user to be empty
         if (decks.equals("[]")){
             this.deckArray = new JSONArray();
         }else{
+            //if deck ids exist set the deck ids accordingly
             try {
                 this.deckArray = new JSONArray(decks);
             } catch (JSONException e) {
@@ -89,7 +95,7 @@ public class Deck {
     }
 
 
-    private JSONArray getDeckIds(){
+    public JSONArray getDeckIds(){
         return this.deckArray == null ? new JSONArray() : this.deckArray;
     };
 
