@@ -20,8 +20,18 @@
     <string name="deck_list_default_front">null</string>
     <string name="deck_list_default_back">null</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--    Create Deck/Card    -->
+    <string name="deck_title_back">Back</string>
+    <string name="deck_title_front">Front</string>
+    <string name="deck_answer_hint">Answer</string>
+    <string name="deck_question_hint">Question</string>
+    <string name="deck_create_pick_id">Submit</string>
+
+    <string-array name="deck_spinner">
+        <item>Null</item>
+    </string-array>
+
+    <!--    Navigation Drawer Title    -->
     <string name="menu_navigation_drawer_title">Structured Flash Cards</string>
 
 
