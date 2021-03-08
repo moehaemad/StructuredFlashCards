@@ -1,6 +1,7 @@
 package com.moehaemad.structuredflashcards.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.moehaemad.structuredflashcards.R;
+import com.moehaemad.structuredflashcards.controller.Deck;
 import com.moehaemad.structuredflashcards.controller.FlashCard;
 import com.moehaemad.structuredflashcards.model.UserInput;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.LinkedList;
 
@@ -43,7 +48,7 @@ public class DeckFragment extends Fragment implements UserInput {
         Button submit = root.findViewById(R.id.deck_menu_submit);
         submit.setOnClickListener(toSubmit);
         Spinner spinner = root.findViewById(R.id.deck_menu_spinner);
-        setSpinneer(spinner);
+        setSpinner(spinner);
 /*        // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true *//* enabled by default *//*) {
             @Override
@@ -96,10 +101,10 @@ public class DeckFragment extends Fragment implements UserInput {
 
     }
 
-    protected void setSpinneer(Spinner spinner){
-        //TODO: get list of ids and set it here
+    protected void setSpinner(Spinner spinner){
         //TODO: if id null then use createFromResource of ArrayAdapter
-        LinkedList<String> strings = new LinkedList<>();
+        //if null then use strings from strings.xml
+        LinkedList<String> strings = setDeckIdsToString();
         strings.add("something");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter(
                 getContext(),
@@ -110,6 +115,24 @@ public class DeckFragment extends Fragment implements UserInput {
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
     }
+
+    private LinkedList<String> setDeckIdsToString(){
+        //create deck class
+        Deck mDeck = new Deck(getContext());
+        //get the ids as a json array
+        JSONArray jsonArray = mDeck.getDeckIds();
+        LinkedList<String> deckIdString = new LinkedList<>();
+        try{
+            for (int i=0, size=jsonArray.length(); i < size; i++){
+                deckIdString.add(jsonArray.getString(i));
+            }
+            return deckIdString;
+
+        }catch(JSONException e){
+            Log.e("Spinner setJSONArray", e.getMessage());
+        }
+        return deckIdString;
+    };
 
 
 
