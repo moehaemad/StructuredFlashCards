@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import com.moehaemad.structuredflashcards.R;
 import com.moehaemad.structuredflashcards.controller.FlashCard;
 import com.moehaemad.structuredflashcards.model.UserInput;
+
+import java.util.LinkedList;
 
 
 public class DeckFragment extends Fragment implements UserInput {
@@ -34,11 +38,12 @@ public class DeckFragment extends Fragment implements UserInput {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         /*The attachToRoot is set to false because the root container is the FragmentContainerView
         *   which only allows fragments to be attached to it and not full Views that the
-        *   infalter.inflate would give back.
-        *solution: https://stacko3verflow.com/questions/62010915/views-added-to-a-fragmentcontainerview-must-be-associated-with-a-fragment-with*/
+        *   infalter.inflate would give back.*/
         View root = inflater.inflate(R.layout.fragment_deck_start, container, false);
         Button submit = root.findViewById(R.id.deck_menu_submit);
         submit.setOnClickListener(toSubmit);
+        Spinner spinner = root.findViewById(R.id.deck_menu_spinner);
+        setSpinneer(spinner);
 /*        // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true *//* enabled by default *//*) {
             @Override
@@ -89,6 +94,21 @@ public class DeckFragment extends Fragment implements UserInput {
     public interface Verified {
         void result(boolean jsonResult);
 
+    }
+
+    protected void setSpinneer(Spinner spinner){
+        //TODO: get list of ids and set it here
+        //TODO: if id null then use createFromResource of ArrayAdapter
+        LinkedList<String> strings = new LinkedList<>();
+        strings.add("something");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(
+                getContext(),
+                R.layout.deck_view_id_spinner,
+                strings
+                );
+        //specify the layout to use when the drop down menu happens (default android)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
     }
 
 

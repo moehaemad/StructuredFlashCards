@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/deck_list_single"
+        android:id="@+id/deck_list_recycler_item_single"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#E4DFDF"
@@ -17,7 +17,6 @@
         android:text="@string/deck_list_default_front"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

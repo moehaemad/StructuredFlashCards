@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".ui.DeckFragment">
 
 
@@ -15,7 +15,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="141dp"
         android:layout_marginBottom="15dp"
-        android:text="Front"
+        android:text="@string/deck_title_front"
         android:textAlignment="center"
         android:textSize="55sp"
         app:layout_constraintBottom_toTopOf="@+id/deck_menu_front_input"
@@ -33,7 +33,7 @@
         android:layout_marginEnd="103dp"
         android:layout_marginBottom="50dp"
         android:ems="10"
-        android:hint="Question"
+        android:hint="@string/deck_question_hint"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/deck_menu_back"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="145dp"
         android:layout_marginBottom="28dp"
-        android:text="Back"
+        android:text="@string/deck_title_back"
         android:textAlignment="center"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/deck_menu_back_input"
@@ -64,7 +64,7 @@
         android:layout_marginEnd="99dp"
         android:layout_marginBottom="60dp"
         android:ems="10"
-        android:hint="Answer"
+        android:hint="@string/deck_answer_hint"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/deck_menu_submit"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,12 +76,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="133dp"
+        android:layout_marginTop="92dp"
         android:layout_marginEnd="134dp"
-        android:layout_marginBottom="90dp"
-        android:text="Submit to Local"
+        android:text="@string/deck_create_pick_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deck_menu_back_input" />
+
+    <Spinner
+
+        android:id="@+id/deck_menu_spinner"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:padding="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deck_menu_back_input" />
+        app:layout_constraintTop_toBottomOf="@+id/deck_menu_submit"
+        app:layout_constraintVertical_bias="0.554" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
