@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +32,7 @@ public class DeckFragment extends Fragment implements UserInput {
 
     private String front;
     private String back;
-    private int id;
+    private int id = -1;
     private FlashCard flashCard;
 
     public void DeckFragment(){
@@ -50,6 +51,7 @@ public class DeckFragment extends Fragment implements UserInput {
         submit.setOnClickListener(toSubmit);
         Spinner spinner = root.findViewById(R.id.deck_menu_spinner);
         setSpinner(spinner);
+        spinner.setOnItemSelectedListener(spinnerClicked);
 /*        // This callback will only be called when MyFragment is at least Started.
         OnBackPressedCallback callback = new OnBackPressedCallback(true *//* enabled by default *//*) {
             @Override
@@ -67,21 +69,23 @@ public class DeckFragment extends Fragment implements UserInput {
     @Override
     public void setUserInput(View v) {
         // get user information from login screen
-        EditText usernameView = getView().findViewById(R.id.login_menu_username);
-        EditText passwordView = getView().findViewById(R.id.login_menu_password);
+        EditText front = getView().findViewById(R.id.deck_menu_front_input);
+        EditText back = getView().findViewById(R.id.deck_menu_back_input);
 
         // set username information
-        this.front = usernameView.getText().toString();
-        this.back = passwordView.getText().toString();
-        //TODO: get id from scrollable view, default to 0 for now
-        this.id = 0;
-        //TODO: create scrollable view to select the ids
+        this.front = front.getText().toString();
+        this.back = back.getText().toString();
+        //check if id is -1 which is default and send user notification to select id
+        if (this.id == -1 ){
+            Toast.makeText(getContext(), "No id Selected", Toast.LENGTH_SHORT).show();
+        }else{
         this.flashCard = new FlashCard(
                 getContext(),
                 this.id,
                 this.front,
                 this.back
                 );
+        }
     }
 
     @Override
@@ -116,6 +120,20 @@ public class DeckFragment extends Fragment implements UserInput {
         spinner.setAdapter(arrayAdapter);
     }
 
+    private AdapterView.OnItemSelectedListener spinnerClicked = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long itemId) {
+            String text = (String) parent.getItemAtPosition(position);
+            id = Integer.parseInt(text);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            //set the default id to be -1
+            id = -1;
+        }
+    };
+
     private LinkedList<String> setDeckIdsToString(){
         //create deck class
         Deck mDeck = new Deck(getContext());
@@ -146,15 +164,16 @@ public class DeckFragment extends Fragment implements UserInput {
     private View.OnClickListener toSubmit = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            //TODO: setup call to Deck.java to insert card given the text input
-            //TODO: implement listener when calling Deck.createCard
+            //setup the flashCard object given the input in EditText fields
+            setUserInput(v);
+            //implement listener to make toast about network result
             Verified makeToast = new Verified() {
                 @Override
                 public void result(boolean jsonResult) {
                     notifyProcess(jsonResult);
                 }
             };
-
+            //create the card and send POST to api
             flashCard.createCard(makeToast);
         }
     };
