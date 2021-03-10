@@ -4,4 +4,6 @@
     <dimen name="app_toolbar_padding">16dp</dimen>
     <dimen name="deck_list_dimen_card">16dp</dimen>
     <dimen name="deck_list_dimen_container">10dp</dimen>
+    <dimen name="user_settings_name">10dp</dimen>
+    <dimen name="user_settings_profile_picture">10dp</dimen>
 </resources>

@@ -21,7 +21,7 @@
         android:id="@+id/loginFragment"
         android:name="com.moehaemad.structuredflashcards.ui.LoginFragment"
         android:label="fragment_login_menu"
-        tools:layout="@layout/fragment_login_menu" />
+        tools:layout="@layout/fragment_user_login" />
     <fragment
         android:id="@+id/createCardFragment"
         android:name="com.moehaemad.structuredflashcards.ui.DeckFragment"
@@ -31,7 +31,7 @@
         android:id="@+id/checkDeckList"
         android:name="com.moehaemad.structuredflashcards.ui.CardFragment"
         android:label="fragment_deck_recycler_list"
-        tools:layout="@layout/fragment_deck_recycler_list" >
+        tools:layout="@layout/fragment_card_recycler_list" >
         <action
             android:id="@+id/action_checkDeckList_to_createCardFragment"
             app:destination="@id/createCardFragment"
