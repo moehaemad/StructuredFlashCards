@@ -61,39 +61,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="99dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="41dp"
         android:ems="10"
         android:hint="@string/deck_answer_hint"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/deck_menu_submit"
+        app:layout_constraintBottom_toTopOf="@+id/deck_menu_spinner"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deck_menu_back" />
-
-    <Button
-        android:id="@+id/deck_menu_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="133dp"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="134dp"
-        android:text="@string/deck_create_pick_id"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deck_menu_back_input" />
 
     <Spinner
 
         android:id="@+id/deck_menu_spinner"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
         android:padding="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deck_menu_back_input" />
+
+    <Button
+        android:id="@+id/deck_menu_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="133dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="134dp"
+        android:text="@string/deck_create_pick_id"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deck_menu_submit"
-        app:layout_constraintVertical_bias="0.554" />
+        app:layout_constraintTop_toBottomOf="@+id/deck_menu_spinner"
+        app:layout_constraintVertical_bias="0.146" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
