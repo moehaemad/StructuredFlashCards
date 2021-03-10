@@ -32,29 +32,24 @@ public class UserSetup {
         //initialize only once for request
         this.networkRequest = new NetworkRequest(appCtx);
         //grab the username from system preferences
-        String username = this.appPreferences.getString(WebsiteInterface.USER_NAME,
+        this.login = this.appPreferences.getString(WebsiteInterface.USER_NAME,
                 "");
         //if constructing somewhere not from login then check shared preferences for stored login
-        if (username == "" ){
+        if (this.login == "" ){
             this.userDecks = new Deck(appCtx);
         }else{
-            this.userDecks = new Deck (appCtx, username);
+            this.userDecks = new Deck (appCtx, this.login);
         }
 
     }
 
     public UserSetup (Context appCtx, String login, String password){
         this(appCtx);
-
+        //TODO: deck is created twice
         //set login and password
         this.login = login;
         this.password = password;
 
-        //check if username passed and then override the deck object with new one given login passed
-        //only check if not  "", otherwise previous constructor will have initialized
-        if (this.login != ""){
-            this.userDecks = new Deck (appCtx, this.login);
-        }
     }
 
     class UserVerificationResponse implements Response.Listener<JSONObject>{
@@ -85,6 +80,14 @@ public class UserSetup {
         SharedPreferences.Editor preferenceEditor = this.appPreferences.edit();
         preferenceEditor.putString(WebsiteInterface.USER_NAME, this.login);
         preferenceEditor.apply();
+    }
+
+    public boolean doesUserExist(){
+        //check shared preferences not just this.login because a login can exist without api auth
+        String user = this.appPreferences.getString(Preferences.USER_NAME, "");
+        //if null then return false
+        //if user exists then the preferences will by anything but ""
+        return !user.equals("");
     }
 
     public Deck getUserDecks() {
