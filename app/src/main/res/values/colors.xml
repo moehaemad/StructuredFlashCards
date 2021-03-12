@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <!--  Background of main fragment/drawer container  -->
     <color name="appColor">#D6EDE5</color>
+    <color name="usernameBackground">#DEDEDE</color>
 </resources>
