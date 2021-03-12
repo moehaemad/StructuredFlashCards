@@ -1,7 +1,6 @@
 package com.moehaemad.structuredflashcards.controller;
 
 import android.content.Context;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,20 +41,33 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
         public DeckRecyclerViewHolder(@NonNull View itemView, DeckRecyclerAdapter adapter){
             super(itemView);
             this.adapter = adapter;
-            wordViewText = itemView.findViewById(R.id.deck_list_single);
+            wordViewText = itemView.findViewById(R.id.deck_list_recycler_item_single);
             itemView.setOnClickListener(toggleCardFace);
         }
-
         protected View.OnClickListener toggleCardFace = new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                try{
-                wordViewText.setText(card.getString("back"));
-                }catch (JSONException e){
-                    Log.e("cardViewholder json", e.getMessage());
-                }
+                String toSetText = checkCardFlip();
+                wordViewText.setText(toSetText);
             }
         };
+
+        public String checkCardFlip(){
+            try {
+                String backText = (String) card.getString("back");
+                String frontText = (String) card.getString("front");
+                String currentViewText = (String) wordViewText.getText();
+                if (currentViewText.equals(backText)){
+                    return frontText;
+                }else if (currentViewText.equals(frontText)){
+                    return backText;
+                }
+            } catch (JSONException e) {
+                Log.e("cardViewholder json", e.getMessage());
+            }
+            return "null";
+        };
+
         public void setJSONCard(JSONObject obj){
             this.card = obj;
         }
@@ -68,7 +80,7 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
         *   be expecting the inflated single view. The fragment will already have inflated the
         *   recycler view so that doesn't need to be inflated*/
         View singleCard = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.deck_list_recycler_item, parent, false);
+                .inflate(R.layout.fragment_deck_list_recycler_item, parent, false);
 
 
         DeckRecyclerViewHolder deckViewHolder = new DeckRecyclerViewHolder(singleCard, this);
