@@ -94,6 +94,10 @@ public class UserSetup {
         return this.userDecks;
     }
 
+    public String getUsername (){
+        return this.login;
+    }
+
     public void checkEmptyLogin (){
         if (this.login == "" || this.password == ""){
             throw new Error("Error in login: no username or password");
