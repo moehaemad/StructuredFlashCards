@@ -36,5 +36,13 @@
             android:id="@+id/action_checkDeckList_to_createCardFragment"
             app:destination="@id/createCardFragment"
             app:popUpTo="@id/startContent" />
+        <action
+            android:id="@+id/action_checkDeckList_to_singleCard"
+            app:destination="@id/singleCard" />
     </fragment>
+    <fragment
+        android:id="@+id/singleCard"
+        android:name="com.moehaemad.structuredflashcards.ui.SingleCard"
+        android:label="fragment_single_card"
+        tools:layout="@layout/fragment_single_card" />
 </navigation>
