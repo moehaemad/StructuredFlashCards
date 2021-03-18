@@ -20,14 +20,18 @@ import com.moehaemad.structuredflashcards.R;
 import com.moehaemad.structuredflashcards.controller.Deck;
 import com.moehaemad.structuredflashcards.controller.FlashCard;
 import com.moehaemad.structuredflashcards.model.UserInput;
+import com.moehaemad.structuredflashcards.model.WebsiteInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
-
+/**
+ * View that allows user to create cards into Database under selectable id (android spinner).
+ * */
 public class DeckFragment extends Fragment implements UserInput {
 
     private String front;
@@ -35,11 +39,9 @@ public class DeckFragment extends Fragment implements UserInput {
     private int id = -1;
     private FlashCard flashCard;
 
-    public void DeckFragment(){
-    //    TODO: configure deck View here
-        //get id's that were already sent for user, using Deck.java
-    }
-
+    /**
+     * Inflate the view and set the spinner here.
+     * */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,25 +49,28 @@ public class DeckFragment extends Fragment implements UserInput {
         *   which only allows fragments to be attached to it and not full Views that the
         *   infalter.inflate would give back.*/
         View root = inflater.inflate(R.layout.fragment_deck_start, container, false);
+        //set button listener
         Button submit = root.findViewById(R.id.deck_menu_submit);
         submit.setOnClickListener(toSubmit);
+        //set spinner adapter
         Spinner spinner = root.findViewById(R.id.deck_menu_spinner);
         setSpinner(spinner);
+        //set spinner listener for the dropdown menu
         spinner.setOnItemSelectedListener(spinnerClicked);
-/*        // This callback will only be called when MyFragment is at least Started.
-        OnBackPressedCallback callback = new OnBackPressedCallback(true *//* enabled by default *//*) {
-            @Override
-            public void handleOnBackPressed() {
-                // Handle the back button event
-                // Get navigation host and do navigate up
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.fragment_host);
-                navController.navigateUp();
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);*/
         return root;
     }
 
+    /**This interface is sent to the controller whenever a network request is made with anonymous
+     *      class. The boolean value is used to make Toast to inform user of network request.*/
+    public interface Verified {
+        void result(boolean jsonResult);
+
+    }
+
+
+    /**
+     *Method that sets the user created input into FlashCard object which is used to create a card.
+     * */
     @Override
     public void setUserInput(View v) {
         // get user information from login screen
@@ -88,6 +93,9 @@ public class DeckFragment extends Fragment implements UserInput {
         }
     }
 
+    /**
+     * create method to inform user of progress of creating a card.
+     * */
     @Override
     public void notifyProcess(@NonNull Boolean verified) {
         String userNotification = "";
@@ -100,16 +108,22 @@ public class DeckFragment extends Fragment implements UserInput {
         Toast.makeText(getContext(), userNotification, Toast.LENGTH_SHORT).show();
     }
 
-    //TODO: create interface that allows getting of response
-    public interface Verified {
-        void result(boolean jsonResult);
 
-    }
 
+    /**
+     * Associate the spinner adapter from a generic ArrayAdapter and use linked list of strings.
+     * */
     protected void setSpinner(Spinner spinner){
-        //TODO: if id null then use createFromResource of ArrayAdapter
+        Deck mDeck = new Deck(getContext());
+
         //if null then use strings from strings.xml
-        LinkedList<String> strings = setDeckIdsToString();
+        LinkedList<String> strings = mDeck.getDeckIdsAsString();
+        String[] resourceStrings = getContext().getResources().getStringArray(R.array.deck_spinner);
+
+        //if no items in deck ids then add string-array from resources
+        //  use Array.asList to turn String array into collection.
+        if (strings == null) strings.addAll(Arrays.asList(resourceStrings));
+        //construct adapter from linkedlist of strings and using a textview .xml file
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter(
                 getContext(),
                 R.layout.deck_view_id_spinner,
@@ -120,6 +134,10 @@ public class DeckFragment extends Fragment implements UserInput {
         spinner.setAdapter(arrayAdapter);
     }
 
+
+    /**
+     * Implement the spinner AdapterView to respond to selected items in the list.
+     * */
     private AdapterView.OnItemSelectedListener spinnerClicked = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long itemId) {
@@ -134,6 +152,11 @@ public class DeckFragment extends Fragment implements UserInput {
         }
     };
 
+
+
+    /**
+     * Construct ids from JSON Array into Strings to be passed with a linkedlist
+     * */
     private LinkedList<String> setDeckIdsToString(){
         //create deck class
         Deck mDeck = new Deck(getContext());
@@ -160,14 +183,16 @@ public class DeckFragment extends Fragment implements UserInput {
 
 
 
-
+    /**
+     * On Click listener for submitting data in order to create the flash card.
+     * */
     private View.OnClickListener toSubmit = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
             //setup the flashCard object given the input in EditText fields
             setUserInput(v);
             //implement listener to make toast about network result
-            Verified makeToast = new Verified() {
+            WebsiteInterface.WebsiteResult makeToast = new WebsiteInterface.WebsiteResult() {
                 @Override
                 public void result(boolean jsonResult) {
                     notifyProcess(jsonResult);
