@@ -22,6 +22,13 @@ public interface WebsiteInterface {
 
     Boolean checkWebsiteAuth();
 
+    /**
+     * Create nested interface to implement only this method for verification of successful query.
+     * */
+    public interface WebsiteResult {
+        void result(boolean jsonResult);
+
+    }
 
 
 }
