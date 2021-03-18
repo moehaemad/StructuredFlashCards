@@ -7,4 +7,12 @@
     <dimen name="user_settings_name">10dp</dimen>
     <dimen name="user_settings_profile_picture">10dp</dimen>
     <dimen name="user_settings_username">24sp</dimen>
+
+    <!--    Single Card Padding View     -->
+    <dimen name="single_card_text_padding">10sp</dimen>
+    <dimen name="single_card_button_padding">10sp</dimen>
+
+
+    <!--    Recycler View Spinner-->
+    <dimen name="cards_recycler_spinner">10dp</dimen>
 </resources>
