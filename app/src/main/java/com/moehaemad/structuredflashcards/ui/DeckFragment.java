@@ -155,35 +155,6 @@ public class DeckFragment extends Fragment implements UserInput {
 
 
     /**
-     * Construct ids from JSON Array into Strings to be passed with a linkedlist
-     * */
-    private LinkedList<String> setDeckIdsToString(){
-        //create deck class
-        Deck mDeck = new Deck(getContext());
-        //get the ids as a json array from Deck
-        JSONArray jsonArray = mDeck.getDeckIds();
-        LinkedList<String> deckIdString = new LinkedList<>();
-        try{
-            for (int i=0, size=jsonArray.length(); i < size; i++){
-                //array is of json objects so get object in array index
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                //set the string of the id property as a string for deck ids
-                deckIdString.add(jsonObject.getString("id"));
-            }
-            return deckIdString;
-
-        }catch(JSONException e){
-            Log.e("Spinner setJSONArray", e.getMessage());
-        }
-        //if null then use strings from strings.xml
-        String[] stringArray = getResources().getStringArray(R.array.deck_spinner);
-        deckIdString.add(stringArray[0]);
-        return deckIdString;
-    };
-
-
-
-    /**
      * On Click listener for submitting data in order to create the flash card.
      * */
     private View.OnClickListener toSubmit = new View.OnClickListener(){
