@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.moehaemad.structuredflashcards.R;
@@ -17,6 +20,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
+
+
+/**
+ *
+ * */
 
 public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapter
                                                                       .DeckRecyclerViewHolder>{
@@ -38,17 +46,33 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
         public TextView wordViewText;
         public DeckRecyclerAdapter adapter;
         public JSONObject card;
-        public DeckRecyclerViewHolder(@NonNull View itemView, DeckRecyclerAdapter adapter){
+        private Context ctx;
+        public DeckRecyclerViewHolder(@NonNull View itemView, DeckRecyclerAdapter adapter, Context ctx){
             super(itemView);
             this.adapter = adapter;
             wordViewText = itemView.findViewById(R.id.deck_list_recycler_item_single);
             itemView.setOnClickListener(toggleCardFace);
+            itemView.setOnLongClickListener(startNewView);
+            this.ctx = ctx;
         }
         protected View.OnClickListener toggleCardFace = new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 String toSetText = checkCardFlip();
                 wordViewText.setText(toSetText);
+            }
+        };
+
+        protected View.OnLongClickListener startNewView = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //navigate to a new View
+                //get Navigation controller
+                NavController navController = Navigation.findNavController(v);
+                //pass the destination with .navigate(...)
+                navController.navigate(R.id.action_checkDeckList_to_singleCard);
+                //return true if the view consumed the long click as per documentation
+                return true;
             }
         };
 
@@ -80,10 +104,14 @@ public class DeckRecyclerAdapter extends RecyclerView.Adapter<DeckRecyclerAdapte
         *   be expecting the inflated single view. The fragment will already have inflated the
         *   recycler view so that doesn't need to be inflated*/
         View singleCard = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_deck_list_recycler_item, parent, false);
+                .inflate(R.layout.fragment_card_recycler_list_item, parent, false);
 
 
-        DeckRecyclerViewHolder deckViewHolder = new DeckRecyclerViewHolder(singleCard, this);
+        DeckRecyclerViewHolder deckViewHolder = new DeckRecyclerViewHolder(
+                singleCard,
+                this,
+                singleCard.getContext()
+        );
         return deckViewHolder;
     }
 
