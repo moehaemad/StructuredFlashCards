@@ -4,6 +4,7 @@ package com.moehaemad.structuredflashcards.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -62,13 +63,14 @@ public class FlashCard{
         }
     };
 
-    private void changePreferences (String prefItem, String prefValue){
-        //TODO: get previous value of sharedpreferences and append
-        SharedPreferences.Editor prefEditor = sharedPreferences.edit();
-        //store the cards array and append the deck id
-        prefEditor.putString(prefItem, prefValue);
-        prefEditor.apply();
-    }
+    private Response.Listener<JSONObject> deleteCard = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            Toast.makeText(appContext, "Network request worked", Toast.LENGTH_SHORT).show();
+
+            Log.d("FlashC delete", response.toString());
+        }
+    };
 
 
     private Response.ErrorListener error = new Response.ErrorListener() {
@@ -78,6 +80,16 @@ public class FlashCard{
         }
     };
 
+    private void changePreferences (String prefItem, String prefValue){
+        //TODO: get previous value of sharedpreferences and append
+        SharedPreferences.Editor prefEditor = sharedPreferences.edit();
+        //store the cards array and append the deck id
+        prefEditor.putString(prefItem, prefValue);
+        prefEditor.apply();
+    }
+
+
+
     public String getFront(int id){
         return this.question;
     }
@@ -86,25 +98,22 @@ public class FlashCard{
         return this.answer;
     }
 
-    public void createCard(final DeckFragment.Verified verification){
+    public void createCard(final WebsiteInterface.WebsiteResult verification){
         //will not be able to create without instantiating constructor with question/answer values
-        Response.Listener<JSONObject> createCard = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    verification.result(response.getBoolean("result"));
-                } catch (JSONException e) {
-                    Log.e("Flash Card createCard", e.getMessage());
-                }
-            }
-        };
+        //create a standard response
+        Response.Listener<JSONObject> createCard = setResponse(verification);
+        //start the network request
         NetworkRequest networkRequest = new NetworkRequest(this.appContext);
+        //Set the api endpoint
         String api = WebsiteInterface.CREATE_CARD;
+        //set method to be POST request
         int method = networkRequest.getMethod("POST");
         try {
+            //set the body of the json post request
             JSONObject toPost = new JSONObject(
                     "{\"id\": "+ id + ", \"front\": "+ question + ", \"back\": "+ answer + "}"
             );
+            //send the network request to the Volley queue
             networkRequest.addToRequestQueue(new JsonObjectRequest(
                     method,
                     api,
@@ -115,6 +124,43 @@ public class FlashCard{
         } catch (JSONException e) {
             Log.e("FlashCard insertcard", e.getMessage());
         }
+    }
+
+    public void deleteCard(final WebsiteInterface.WebsiteResult verification, int id){
+        //create the standard response for the UI
+        Response.Listener<JSONObject> deleteCard = setResponse(verification);
+        //isntantiate network request object
+        NetworkRequest networkRequest = new NetworkRequest(this.appContext);
+        //set api endpoint; use /:id/:front?/:back?
+        //TODO: receive value of front and back as well but under different method signature
+        String api = WebsiteInterface.DELETE_CARD + String.valueOf(id);
+        //set method
+        int method = networkRequest.getMethod("DELETE");
+        //send the network request off into queue
+        networkRequest.addToRequestQueue(new JsonObjectRequest(
+                method,
+                api,
+                null,
+                deleteCard,
+                error
+        ));
+    }
+
+    /**
+     * Create a standard response method that sets the interface implementation int he UI to Toast
+     *  with the JSON result.
+     * */
+    private Response.Listener<JSONObject> setResponse(final WebsiteInterface.WebsiteResult webResult){
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    webResult.result(response.getBoolean("result"));
+                } catch (JSONException e) {
+                    Log.e("Flash Card createCard", e.getMessage());
+                }
+            }
+        };
     }
 
     private void setupCards(){
