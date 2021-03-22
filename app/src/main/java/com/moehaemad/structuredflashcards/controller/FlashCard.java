@@ -25,21 +25,34 @@ import java.util.LinkedList;
 
 public class FlashCard{
     private static Context appContext;
-    private int id;
+    private int id = -1;
     private String question;
     private String answer;
     private SharedPreferences sharedPreferences;
     private final String prefName = Preferences.PACKAGE;
 
+    /**
+     * Constructor used where full data is not necessarily required.
+     * */
+    public FlashCard(@NonNull Context appContext){
+        this.appContext = appContext;
+    }
+
+    /**
+     * Constructor to start the flash card.
+     * */
     public FlashCard(@NonNull Context appContext, @NonNull int id){
+        this(appContext);
         this.id=id;
         this.question = "";
         this.answer = "";
-        this.appContext = appContext;
         this.sharedPreferences = appContext.getSharedPreferences(prefName, Context.MODE_PRIVATE);
         setupCards();
     }
 
+    /**
+     * Constructor setting up the full flash card.
+     * */
     public FlashCard (Context appContext, @NonNull int id, @NonNull String question, @NonNull String answer){
         this(appContext, id);
         this.id = id;
@@ -87,6 +100,30 @@ public class FlashCard{
         prefEditor.putString(prefItem, prefValue);
         prefEditor.apply();
     }
+
+    /**
+     * On change or creating the deck id, set the id into shared preferences and the class variable
+     * */
+    private void setActiveId(int id){
+        this.id = id;
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putInt(Preferences.ACTIVE_DECK_ID, id);
+        editor.apply();
+    }
+
+    /**
+     * Return the active id that is set in shared preferences.
+     * */
+    public int getActiveId(){
+        if (this.id == -1){
+            //if id is not set which it should be but in the case it isn't grab from shared preferences.
+            return this.sharedPreferences.getInt(Preferences.ACTIVE_DECK_ID, -1);
+        }else{
+            return this.id;
+        }
+    }
+
+
 
 
 
