@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.moehaemad.structuredflashcards.R;
+import com.moehaemad.structuredflashcards.model.UserInput;
 
 /**
  * This fragment is called after selecting a particular card from the recycler view in the 'View
@@ -35,21 +36,19 @@ public class SingleCard extends Fragment {
         super.onCreate(savedInstanceState);
         //if arguments are null then disable the update and delete buttons by setting class
         //  variable
-
+        Bundle mbundle = getArguments();
         //TODO: check between getArguments() vs savedInstanceState
-        if (getArguments() != null) {
+        if (mbundle == null) {
             //have to wait to inflate the view so set a class variable before disabling listeners
             this.passedValue = false;
-            return;
+//            return;
         }else{
             this.passedValue = true;
-
         }
         //gather arguments if not null
-        //setup FlashCard class variable
-        this.cardId = savedInstanceState.getInt("id");
-        this.cardFront = savedInstanceState.getString("front");
-        this.cardBack = savedInstanceState.getString("back");
+        this.cardId = mbundle.getInt(UserInput.BUNDLE_DECK_ID);
+        this.cardFront = mbundle.getString(UserInput.BUNDLE_FRONT);
+        this.cardBack = mbundle.getString(UserInput.BUNDLE_BACK);
     }
 
     /**
