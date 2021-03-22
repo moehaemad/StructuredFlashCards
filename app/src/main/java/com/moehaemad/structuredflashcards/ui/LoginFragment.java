@@ -19,7 +19,9 @@ import com.moehaemad.structuredflashcards.controller.UserSetup;
 import com.moehaemad.structuredflashcards.model.UserInput;
 
 
-
+/**
+ * This creates the login menu or the settings menu based on whether the user is registered.
+ * */
 public class LoginFragment extends Fragment implements UserInput {
     private static String login = "" ;
     private static String password = "";

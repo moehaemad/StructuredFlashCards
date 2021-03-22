@@ -37,7 +37,7 @@ import java.util.LinkedList;
 public class CardFragment extends Fragment {
     private LinkedList<JSONObject> deckDataWeb;
     private LinkedList<String> deckIds;
-    private int activeId;
+    private int activeId = -1;
     private DeckRecyclerAdapter deckRecyclerAdapter;
     private RecyclerView recyclerView;
 
@@ -81,7 +81,7 @@ public class CardFragment extends Fragment {
         //TODO: create a test for this or  particular use case
         //TODO: remove hardcoded id
         //TODO grab id from spinner on selectedItem listener
-
+        //TODO: use the active id class variable assuming it's not -1
         FlashCard flashCard = new FlashCard(getContext(), 3);
         //insert the card into the linkedlist
         LinkedList<JSONObject> cards = flashCard.getCards();
@@ -110,7 +110,9 @@ public class CardFragment extends Fragment {
 
         // setup recycler view adapter
         //send context through here instead of converting it adapter
-        this.deckRecyclerAdapter = new DeckRecyclerAdapter(getActivity(), this.deckDataWeb);
+        this.deckRecyclerAdapter = new DeckRecyclerAdapter(getActivity(),
+                this.deckDataWeb,
+                this.activeId);
         //find recycler view in the associated layout
         this.recyclerView = root.findViewById(R.id.card_recycler_list_recyclerview);
         //link the recycler view to custom adapter
@@ -133,6 +135,7 @@ public class CardFragment extends Fragment {
               R.layout.deck_view_id_spinner,
               this.deckIds
         );
+        //associate spinner adapter
         spinner.setAdapter(spinnerAdapter);
         //set on item selected listeners
         spinner.setOnItemSelectedListener(spinnnerSelectedListener);
@@ -147,6 +150,8 @@ public class CardFragment extends Fragment {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             //setting the active id to be the integer at the position spinner is selected
             activeId = Integer.parseInt(deckIds.get(position));
+            //notify the adapter that the active Id has changed which will force the view to rebind.
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
 
         @Override

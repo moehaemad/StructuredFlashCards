@@ -34,6 +34,7 @@ public class Deck {
         this.ctx = ctx;
         //set the class variable to include these ids
         setDeck();
+        syncDeck();
     }
 
     /**
