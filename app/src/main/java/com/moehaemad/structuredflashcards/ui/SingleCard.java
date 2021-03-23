@@ -10,10 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.moehaemad.structuredflashcards.R;
+import com.moehaemad.structuredflashcards.controller.FlashCard;
 import com.moehaemad.structuredflashcards.model.UserInput;
+import com.moehaemad.structuredflashcards.model.WebsiteInterface;
+
+import java.util.HashMap;
 
 /**
  * This fragment is called after selecting a particular card from the recycler view in the 'View
@@ -21,10 +26,12 @@ import com.moehaemad.structuredflashcards.model.UserInput;
  * */
 public class SingleCard extends Fragment {
 
-    private int cardId;
-    private String cardFront;
-    private String cardBack;
+    private int cardId = -1;
+    private String cardFront = "";
+    private String cardBack = "";
     private boolean passedValue = false;
+    private FlashCard flashCard;
+    private View rootView;
 
     /**
      * Setup the single card by receiving the data that instantiates the view in a bundle.
@@ -41,7 +48,7 @@ public class SingleCard extends Fragment {
         if (mbundle == null) {
             //have to wait to inflate the view so set a class variable before disabling listeners
             this.passedValue = false;
-//            return;
+            return;
         }else{
             this.passedValue = true;
         }
@@ -49,6 +56,10 @@ public class SingleCard extends Fragment {
         this.cardId = mbundle.getInt(UserInput.BUNDLE_DECK_ID);
         this.cardFront = mbundle.getString(UserInput.BUNDLE_FRONT);
         this.cardBack = mbundle.getString(UserInput.BUNDLE_BACK);
+        this.flashCard = new FlashCard(getContext(),
+                this.cardId,
+                this.cardFront,
+                this.cardBack);
     }
 
     /**
@@ -60,7 +71,10 @@ public class SingleCard extends Fragment {
 
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_single_card, container, false);
-
+        //Set the root view visible as class variable for convenience
+        this.rootView = root;
+        //Set text based on bundle received values
+        setText(root);
         //setup button listeners for the update and delete depending on if bundle was received
         if (this.passedValue) {
             setupListeners(root);
@@ -71,11 +85,14 @@ public class SingleCard extends Fragment {
         return root;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        //TODO: receive bundle with safeArgs arguments that are passed from previous backstack entry
-        super.onViewCreated(view, savedInstanceState);
+    /**
+     * Setting the EditText properties of the single card view based on the bundle received.
+     * */
+    private void setText(View v){
+        EditText front = v.findViewById(R.id.singleCard_front_edit);
+        EditText back = v.findViewById(R.id.singleCard_back_edit);
+        front.setText(this.cardFront);
+        back.setText(this.cardBack);
     }
 
     /**
@@ -96,8 +113,18 @@ public class SingleCard extends Fragment {
        update.setOnClickListener(updateAction);
        Button delete = v.findViewById(R.id.singleCard_delete);
        delete.setOnClickListener(deleteAction);
+    }
 
-
+    /**
+     * This is a standard Toast with just a varying message so used as separate method.
+     * */
+    private WebsiteInterface.WebsiteResult standardResult(final String message){
+        return new WebsiteInterface.WebsiteResult() {
+            @Override
+            public void result(boolean jsonResult) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     /**
@@ -108,12 +135,41 @@ public class SingleCard extends Fragment {
         public void onClick(View v) {
             //get flash card from class variable
 
-            //implement the WebsiteInterface.WebsiteResult interface for Toast
-
             //call the flash card update action from here
-
+            //TODO: implement the update method in FlashCard.java
+            //create Hashmap of previous values for card and updated values
+            HashMap<String, String> mHash = new HashMap<>();
+            //gather the previous values for front and back which are stored as class variables
+            mHash.put("PREV_FRONT", cardFront);
+            mHash.put("PREV_BACK", cardBack);
+            //check whether different from previous input
+            if (canUpdate()){
+                EditText newFront = rootView.findViewById(R.id.singleCard_front_edit);
+                String updatedFront = newFront.getText().toString();
+                EditText newBack = rootView.findViewById(R.id.singleCard_back_edit);
+                String updatedBack = newBack.getText().toString();
+                mHash.put("NEW_FRONT", updatedFront);
+                mHash.put("NEW_BACK", updatedBack);
+            }
+            //add prev values as 'specified columns' and current val as 'columns'
+            //send hashmap to flashcard update method
         }
     };
+
+    /**
+     * Check whether current edit text values different from previous.
+     *
+     * Return true if they are not equal, otherwise they are equal and should not send update.
+     * */
+    private boolean canUpdate(){
+        EditText updatedFront = this.rootView.findViewById(R.id.singleCard_front_edit);
+        String updatedFrontValue = updatedFront.getText().toString();
+        EditText updatedBack = this.rootView.findViewById(R.id.singleCard_back_edit);
+        String updatedBackValue = updatedBack.getText().toString();
+        //if either equal operator is false then you can update which would require you to return true
+        boolean update = !(updatedFrontValue.equals(cardFront) && updatedBackValue.equals(cardBack));
+        return update;
+    }
 
     /**
      * Delete button that sends a Delete request for the card given the text.
@@ -122,11 +178,13 @@ public class SingleCard extends Fragment {
         @Override
         public void onClick(View v) {
             //get flash card from class variable
-
-            //implement the WebsiteInterface.WebsiteResult interface for Toast
-
+            //call the standardResult to toast with deleted message
             //call the flash card delete action from here
-
+            flashCard.deleteCard(
+                    standardResult("Successfully deleted card!"),
+                    cardId,
+                    cardFront,
+                    cardBack);
         }
     };
 }
