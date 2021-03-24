@@ -40,6 +40,7 @@ public class CardFragment extends Fragment {
     private int activeId = -1;
     private DeckRecyclerAdapter deckRecyclerAdapter;
     private RecyclerView recyclerView;
+    private FlashCard flashCard;
 
 
     /**
@@ -74,6 +75,20 @@ public class CardFragment extends Fragment {
     }
 
     /**
+     * Get cards once again from the flash card and update the linkedlist.
+     *
+     * This is for when back pressed is called from the single card view where the user has either
+     *  updated or deleted card data.
+     * */
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.updateFlashCards();
+        //notify the recycler view that the data has been changed
+        this.deckRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    /**
      * Setup the flashcard object to be used in class variables
      * */
     private void setFlashCard(){
@@ -82,10 +97,25 @@ public class CardFragment extends Fragment {
         //TODO: remove hardcoded id
         //TODO grab id from spinner on selectedItem listener
         //TODO: use the active id class variable assuming it's not -1
-        FlashCard flashCard = new FlashCard(getContext(), 3);
+        this.flashCard = new FlashCard(getContext());
+        this.activeId = flashCard.getActiveId();
         //insert the card into the linkedlist
         LinkedList<JSONObject> cards = flashCard.getCards();
         //append the linked list with the result of the network query
+        this.deckDataWeb.addAll(cards);
+    }
+
+    /**
+     * This will update the flash cards in case of update or delete from the single card view.
+     * */
+    private void updateFlashCards(){
+        //TODO: test whether id stays the same on back press call
+        //implementing new flashCard object here just in case
+        this.flashCard = new FlashCard(getContext());
+        this.activeId = this.flashCard.getActiveId();
+        //clear all the data the data that might have been there
+        this.deckDataWeb.clear();
+        LinkedList<JSONObject> cards = flashCard.getCards();
         this.deckDataWeb.addAll(cards);
     }
 
@@ -96,8 +126,6 @@ public class CardFragment extends Fragment {
         Deck mDeck = new Deck(getContext());
         //set the deck ids from the deck object
         this.deckIds = mDeck.getDeckIdsAsString();
-        //set the activeId to be -1 by default
-        this.activeId = -1;
     }
 
 
@@ -150,6 +178,8 @@ public class CardFragment extends Fragment {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             //setting the active id to be the integer at the position spinner is selected
             activeId = Integer.parseInt(deckIds.get(position));
+            //make the flash card object aware of the selected id so it can put into preferences
+            flashCard.setActiveId(activeId);
             //notify the adapter that the active Id has changed which will force the view to rebind.
             recyclerView.getAdapter().notifyDataSetChanged();
         }

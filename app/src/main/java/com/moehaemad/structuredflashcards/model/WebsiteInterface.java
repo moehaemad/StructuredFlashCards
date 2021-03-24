@@ -15,6 +15,12 @@ public interface WebsiteInterface {
     String GET_DECKS = PRODUCTION + "getDecks/";
     String GET_CARDS = PRODUCTION + "getCards/";
     String SET_CARD = PRODUCTION + "setCard/";
+    String PREV_FRONT = "PREV_FRONT";
+    String PREV_BACK = "PREV_BACK";
+    String UPDATE_FRONT = "UPDATE_FRONT";
+    String UPDATE_BACK = "UPDATE_BACK";
+    String UPDATE_ID = "UPDATE_ID";
+
     String SET_DECK = PRODUCTION + "setDeck/";
     String DELETE_CARD = PRODUCTION + "delCard/";
     String DELETE_DECK = PRODUCTION + "delDeck/";

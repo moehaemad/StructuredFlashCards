@@ -180,6 +180,13 @@ public class FlashCard{
         String api = WebsiteInterface.SET_CARD;
         NetworkRequest networkRequest = new NetworkRequest(this.appContext);
         int method = networkRequest.getMethod("PUT");
+        networkRequest.addToRequestQueue(new JsonObjectRequest(
+                method,
+                api,
+                jsonBody,
+                updateCard,
+                error
+        ));
 
 
     }
@@ -205,11 +212,11 @@ public class FlashCard{
             //specify columns
             JSONArray specifyColumns = new JSONArray();
             //set the id ex {"id": 0}
-            columns.put(new JSONObject("{\"id\":" + params.get(WebsiteInterface.UPDATE_ID) + " }"));
+            specifyColumns.put(new JSONObject("{\"id\":" + params.get(WebsiteInterface.UPDATE_ID) + " }"));
             //set the front ex {"front":... }
-            columns.put(new JSONObject("{\"front\":" + params.get(WebsiteInterface.PREV_FRONT) + "}"));
+            specifyColumns.put(new JSONObject("{\"front\":" + params.get(WebsiteInterface.PREV_FRONT) + "}"));
             //set the back ex {"back" :...}
-            columns.put(new JSONObject("{\"back\":" + params.get(WebsiteInterface.PREV_BACK) + "}"));
+            specifyColumns.put(new JSONObject("{\"back\":" + params.get(WebsiteInterface.PREV_BACK) + "}"));
             //attach the json arrays into the returning body
             jsonBody.put("columns", columns);
             jsonBody.put("specifyColumns", specifyColumns);
