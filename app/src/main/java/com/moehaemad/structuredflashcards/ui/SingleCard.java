@@ -139,19 +139,23 @@ public class SingleCard extends Fragment {
             //TODO: implement the update method in FlashCard.java
             //create Hashmap of previous values for card and updated values
             HashMap<String, String> mHash = new HashMap<>();
+            //enter in id which will be the same regardless of difference in input
+            mHash.put(WebsiteInterface.UPDATE_ID, String.valueOf(cardId));
             //gather the previous values for front and back which are stored as class variables
-            mHash.put("PREV_FRONT", cardFront);
-            mHash.put("PREV_BACK", cardBack);
+            mHash.put(WebsiteInterface.PREV_FRONT, cardFront);
+            mHash.put(WebsiteInterface.PREV_BACK, cardBack);
             //check whether different from previous input
             if (canUpdate()){
                 EditText newFront = rootView.findViewById(R.id.singleCard_front_edit);
                 String updatedFront = newFront.getText().toString();
                 EditText newBack = rootView.findViewById(R.id.singleCard_back_edit);
                 String updatedBack = newBack.getText().toString();
-                mHash.put("NEW_FRONT", updatedFront);
-                mHash.put("NEW_BACK", updatedBack);
+                mHash.put(WebsiteInterface.UPDATE_FRONT, updatedFront);
+                mHash.put(WebsiteInterface.UPDATE_BACK, updatedBack);
+                flashCard.updateCard(standardResult("Updated Card!"), mHash);
             }
             //add prev values as 'specified columns' and current val as 'columns'
+
             //send hashmap to flashcard update method
         }
     };
