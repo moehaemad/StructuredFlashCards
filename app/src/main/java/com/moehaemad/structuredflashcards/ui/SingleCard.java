@@ -44,7 +44,8 @@ public class SingleCard extends Fragment {
         //if arguments are null then disable the update and delete buttons by setting class
         //  variable
         Bundle mbundle = getArguments();
-        //TODO: check between getArguments() vs savedInstanceState
+
+        //savedInstanceState is not the arguments passed with NAVController, args in getArguments()
         if (mbundle == null) {
             //have to wait to inflate the view so set a class variable before disabling listeners
             this.passedValue = false;
@@ -136,7 +137,6 @@ public class SingleCard extends Fragment {
             //get flash card from class variable
 
             //call the flash card update action from here
-            //TODO: implement the update method in FlashCard.java
             //create Hashmap of previous values for card and updated values
             HashMap<String, String> mHash = new HashMap<>();
             //enter in id which will be the same regardless of difference in input

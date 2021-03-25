@@ -6,8 +6,8 @@ public interface WebsiteInterface {
     String DECK_ARRAY = Preferences.DECK_ARRAY;
 
 
-//    String PRODUCTION = "https://moehaemad.ca/structuredFlashCards/";
-    String PRODUCTION = "http://192.168.1.65:3000/structuredFlashCards/";
+    String PRODUCTION = "https://moehaemad.ca/structuredFlashCards/";
+//    String PRODUCTION = "http://192.168.1.65:3000/structuredFlashCards/";
     String CREATE_USER = PRODUCTION + "createUser/";
     String CREATE_DECK = PRODUCTION + "createDeck/";
     String CREATE_CARD = PRODUCTION + "createCard/";
