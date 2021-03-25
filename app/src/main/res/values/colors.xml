@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#944654</color>
+    <color name="colorPrimaryDark">#944654</color>
+    <color name="colorAccent">#592E83</color>
     <!--  Background of main fragment/drawer container  -->
-    <color name="appColor">#D6EDE5</color>
+    <color name="appColor">#F4F7F5</color>
     <color name="usernameBackground">#DEDEDE</color>
+    <color name="mainText">#944654</color>
 </resources>
