@@ -27,8 +27,7 @@ public class UserSetup {
 
     public UserSetup(Context appCtx){
         //setup sharedPreferences for user information
-        this.appPreferences = appCtx.getSharedPreferences(Preferences.PACKAGE,
-                Context.MODE_PRIVATE);
+        this.appPreferences = getAppPreferences(appCtx);
         //initialize only once for request
         this.networkRequest = new NetworkRequest(appCtx);
         //grab the username from system preferences
@@ -52,6 +51,14 @@ public class UserSetup {
 
     }
 
+    /**
+     * This is to access the shared preferences with testing so it can be stubbed.
+     * */
+    protected SharedPreferences getAppPreferences(Context ctx){
+        return ctx.getSharedPreferences(Preferences.PACKAGE,
+                Context.MODE_PRIVATE);
+    }
+
     class UserVerificationResponse implements Response.Listener<JSONObject>{
         @Override
         public void onResponse(JSONObject response) {
@@ -62,7 +69,7 @@ public class UserSetup {
                         response.getBoolean("result"));
                 prefEditor.apply();
                 syncUserToApp();
-                Log.d("Usersetup resp object", response.toString());
+//                Log.d("Usersetup resp object", response.toString());
             }catch(JSONException e) {
                 Log.e("user webverif resp", e.getMessage());
             }
@@ -147,14 +154,14 @@ public class UserSetup {
         return checkWebsiteAuth();
     }
 
-    private Boolean checkWebsiteAuth (){
+    private synchronized Boolean checkWebsiteAuth (){
         //check whether the website result was verified and return the result accordingly
         Boolean jsonResult;
 
         jsonResult = this.appPreferences.getBoolean(WebsiteInterface.USER_VALIDATED,
                 false);
         //make sure the webResult was atleast given
-        Log.d("checkWebsiteAuth", "query " + jsonResult.toString());
+//        Log.d("checkWebsiteAuth", "query " + jsonResult.toString());
         return jsonResult;
     }
 }
