@@ -48,12 +48,18 @@ public class Deck {
     }
 
     /**
+     * Set the username for testing.
+     * */
+    public void setUsername (String newUser){
+        this.username = newUser;
+    }
+
+    /**
      * Class used for a generic network request. Intead of anonymous class, this inner class sets
      *  the shared preferences .
      * */
     class GetDeckResponse implements Response.Listener<JSONObject>{
         @Override
-
         /**
          * Handle the response from the network request.
          * */
@@ -63,13 +69,13 @@ public class Deck {
             try{
                 // add response as string from json array into shared preferences
                 prefEditor.putString(Preferences.DECK_ARRAY, response.get("ids").toString());
-                Log.d("Deck ids", response.get("ids").toString());
-                Log.d("deckArray", deckArray.toString());
+//                Log.d("Deck ids", response.get("ids").toString());
+//                Log.d("deckArray", deckArray.toString());
+                //apply changed from the editor
+                prefEditor.apply();
             }catch(JSONException e){
                 Log.e("Deck json error", e.getMessage());
             }
-            //apply changed from the editor
-            prefEditor.apply();
         }
     }
 
@@ -91,7 +97,7 @@ public class Deck {
         //create network request for GET of the ids
         NetworkRequest networkRequest = new NetworkRequest(this.ctx);
         int method = networkRequest.getMethod("GET");
-
+        Log.d("Deck syncDeck", "running sync deck");
         //construct JSONobjectrequest for queue
         networkRequest.addToRequestQueue(new JsonObjectRequest(
                 method,
@@ -152,5 +158,11 @@ public class Deck {
         //used for convenience but function will not enter this stage because of null check.
         return toReturn;
     }
+
+    /**
+     * Create a method to send api post to create user ids
+     * */
+
+
 
 }
