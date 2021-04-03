@@ -93,7 +93,7 @@ public class UserSetupTest {
     public void createUser_Exception(){
         this.mUserSetup = new UserSetup(this.mContext, "", "");
         this.mUserSetup.createUser();
-    }\
+    }
 
 
     @After
