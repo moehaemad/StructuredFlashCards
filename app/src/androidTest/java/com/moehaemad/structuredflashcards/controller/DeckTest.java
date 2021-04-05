@@ -194,11 +194,12 @@ public class DeckTest {
             JSONArray toCheckArray = this.mDeck.getDeckIds();
             /*
             * JSONArray not invoking equals method despite equal values in array so convert to
-            *   String.
+            *   String. Use contentEquals instead of general .equals because otherwise undefined
+            *   even in case where JSON arrays are equal
             * */
             String expected = mArray.toString();
             String actual = toCheckArray.toString();
-            assertEquals(expected, actual);
+            assertTrue(expected.contentEquals(actual));
         } catch (JSONException e) {
             assert(false);
         }
