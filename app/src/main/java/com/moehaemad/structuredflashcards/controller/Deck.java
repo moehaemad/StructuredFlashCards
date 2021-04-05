@@ -129,8 +129,48 @@ public class Deck {
      * Grab the ids from class property
      * */
     public JSONArray getDeckIds(){
-        return this.deckArray == null ? new JSONArray() : this.deckArray;
+        //format of the deck ids will be an array but more specifically an array of objects
+            //containing key-value pairs for the particular deck (i.e. description, username etc.)
+        //make sure the thing you're returning exists, don't ever return null
+        try {
+            this.deckArray = new JSONArray(this.sharedPreferences.getString(
+                    Preferences.DECK_ARRAY,
+                    "[]"
+            ));
+            return this.deckArray;
+        } catch (JSONException e) {
+            //if anything goes wrong with the shared preferences itself then throw error
+            //default case already handled
+            throw new Error();
+        }
     };
+
+    /**
+     * Associate a deck id with a user.
+     *
+     *  Change the shared preferences to concatenate the id to the JSON array.
+     * */
+    public void createId(int id){
+        //check if username if empty string then return error
+        //grab username
+        //invalid username will go to error function which will not touch shared preferences
+        //get api endpoint
+        //send the request tot the api endpoint
+
+        //create request and send to queue
+
+    }
+
+
+    /**
+     * Delete the associated deck id to a user.
+     *
+     * Change the shared preferences to delete from JSON array.
+     * */
+    public void deleteId(){
+
+    }
+
 
     /**
      * Returns the deck ids from the network request as strings instead of JSONArray to avoid parsing
@@ -158,11 +198,6 @@ public class Deck {
         //used for convenience but function will not enter this stage because of null check.
         return toReturn;
     }
-
-    /**
-     * Create a method to send api post to create user ids
-     * */
-
 
 
 }
