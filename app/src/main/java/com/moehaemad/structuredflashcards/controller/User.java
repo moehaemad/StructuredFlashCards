@@ -38,7 +38,11 @@ public class User {
      * Check if the information provided is empty at not usable.
      * */
     public void checkEmptyLogin(){
-        if (this.login == "" || this.password == ""){
+        /*check if both of them are empty, if only one empty it would be username in which case
+        *   it is acceptable.*/
+        if (this.login.equals("") && this.password.equals("")){
+
+            //TODO: this will crash the application, don't throw unles ready to handle
             throw new Error ("Error in User login: no username or password");
         }
     }

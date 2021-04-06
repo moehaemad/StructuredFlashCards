@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 public class DeckTest {
     private Deck mDeck;
+    private Deck mDeckWithUser;
     private SharedPreferences mPreferences;
     private Context mContext;
     private Map<String, String> prefKeys;
@@ -44,6 +45,8 @@ public class DeckTest {
                 Context.MODE_PRIVATE
         );
         this.mDeck = new Deck(this.mContext);
+        //create same deck but attach a user to test a different constructor
+        this.mDeckWithUser = new Deck(this.mContext, this.user);
         //use this to remove all variables in each teardown
         this.prefKeys = new HashMap<>();
         this.prefKeys.put("deckIds", Preferences.DECK_ARRAY);
@@ -100,7 +103,7 @@ public class DeckTest {
         mEditor.putString(Preferences.DECK_ARRAY,"[1]");
         mEditor.apply();
         //make request to create an id
-        this.mDeck.createId(2);
+        this.mDeck.createId(2, null);
         //check if the value updated in preferences has appended the create id value
         try {
             JSONArray createResult = new JSONArray(this.mPreferences.getString(Preferences.DECK_ARRAY,
@@ -118,14 +121,14 @@ public class DeckTest {
     public synchronized void createId_noUsername(){
         this.mDeck.setUsername("");
         //expect error to be throws if creating an id without a username attached
-        this.mDeck.createId(0);
+        this.mDeck.createId(0, null);
     }
 
     //create deck ids given not registered username in api, expect empty preferences
     @Test
     public synchronized void createId_invalidUsername(){
         this.mDeck.setUsername(" blank ");
-        this.mDeck.createId(10);
+        this.mDeck.createId(10, null);
         /*no change will have happened to shared preferences so assert it's still empty string from
             teardown*/
         assertEquals("", this.mPreferences.getString(Preferences.DECK_ARRAY, ""));
@@ -134,15 +137,23 @@ public class DeckTest {
     //boring: create ids with valid user
     @Test
     public synchronized void createId_validUsername(){
-        this.mDeck.createId(1);
+        int id = 1;
+        this.mDeckWithUser.createId(id, null);
         //check in shared preferences which will be changed on the network request
         JSONArray actualPreferences = null;
         try {
             actualPreferences = new JSONArray(this.mPreferences.getString(
                     Preferences.DECK_ARRAY,
                     "[]"));
-            JSONArray expectedPreferences = new JSONArray("[1]");
-            assertEquals(expectedPreferences, actualPreferences);
+            JSONObject expectedObject = new JSONObject()
+                    .put("id", id)
+                    .put("username", this.user);
+            JSONArray expectedPreferences = new JSONArray()
+                    .put(expectedObject);
+            //TODO: fix comparison bug using String char sequences instead
+            assertTrue (expectedPreferences.toString().contentEquals(
+                    actualPreferences.toString()
+                    ));
         } catch (JSONException e) {
             //if error thrown just say test is false or not passed
             assert(false);

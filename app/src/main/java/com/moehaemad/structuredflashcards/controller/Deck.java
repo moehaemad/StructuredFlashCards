@@ -2,6 +2,7 @@ package com.moehaemad.structuredflashcards.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.icu.text.Replaceable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.moehaemad.structuredflashcards.model.NetworkRequest;
 import com.moehaemad.structuredflashcards.model.Preferences;
 import com.moehaemad.structuredflashcards.model.WebsiteInterface;
@@ -25,6 +27,7 @@ public class Deck {
     private JSONArray deckArray;
     private SharedPreferences sharedPreferences;
     private Context ctx;
+    private User mUser;
 
     /**
      * Create deck from context without specifying username in case it's presumed to be set.
@@ -43,6 +46,7 @@ public class Deck {
     public Deck(@NonNull Context ctx, @NonNull  String username){
         this(ctx);
         this.username = username;
+        this.mUser = new User(this.username, "");
         //make a network request to get the ids
         syncDeck();
     }
@@ -145,22 +149,90 @@ public class Deck {
         }
     };
 
+
     /**
      * Associate a deck id with a user.
      *
      *  Change the shared preferences to concatenate the id to the JSON array.
      * */
-    public void createId(int id){
+    public synchronized void createId(int id, @Nullable String description){
         //check if username if empty string then return error
+        try{
+            this.mUser.checkEmptyLogin();
+        }catch(Error err){
+            Log.e("Deck createId", "error thrown creating id");
+        }
+        //get the response listener
+        Response.Listener createIdListener = this.getCreateIdListener(id, description);
         //grab username
-        //invalid username will go to error function which will not touch shared preferences
-        //get api endpoint
-        //send the request tot the api endpoint
+        //create network request object
+        NetworkRequest mNetworkRequest = new NetworkRequest(this.ctx);
+        int method = mNetworkRequest.getMethod("POST");
+        //set the url
+        String url = WebsiteInterface.CREATE_DECK;
+        //TODO: create helper function for this
+        try {
+            //create post data
+            JSONObject createDeckId = new JSONObject();
+            createDeckId.put("id", id);
+            createDeckId.put("username", this.username);
+            //if description is null then do add nothing in post
+            createDeckId.put("description", description == null ? "" : description);
+            //invalid username will go to error function which will not touch shared preferences
+            //create request and send to queue
+            mNetworkRequest.addToRequestQueue(new JsonObjectRequest(
+                    method,
+                    url,
+                    createDeckId,
+                    createIdListener,
+                    error
+            ));
+        } catch (JSONException e) {
+            Log.e("Deck createID", "error in creating JSON body");
+        }
 
-        //create request and send to queue
 
     }
 
+    /**
+     * Helper function for creating id to return the JSON object request listener
+     * */
+    private synchronized Response.Listener<JSONObject> getCreateIdListener (int id,
+                                                                    @Nullable String description){
+
+        final Integer finalId = id;
+        final String finalDescription = description;
+
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("result")){
+                        //get current JSON Array for the deck ids
+                        JSONArray mArray = new JSONArray(sharedPreferences.getString(
+                                Preferences.DECK_ARRAY,
+                                "[]"
+                        ));
+                        //create JSON Object of the id, username, and description
+                        JSONObject toInsert = new JSONObject();
+                        toInsert.put("id", finalId);
+                        toInsert.put("username", username);
+                        toInsert.put("description", finalDescription);
+                        //insert the object into the json array
+                        mArray.put(toInsert);
+                        //open shared preferences and update result for id, username, and description
+                        SharedPreferences.Editor mEditor = sharedPreferences.edit();
+                        //send the value of the json array as string to preferences
+                        mEditor.putString(Preferences.DECK_ARRAY, mArray.toString());
+                        mEditor.apply();
+                        //append result to JSON Array:
+                    }
+                } catch (JSONException e) {
+                    Log.e("Deck createID", "error in response JSON");
+                }
+            }
+        };
+    }
 
     /**
      * Delete the associated deck id to a user.
