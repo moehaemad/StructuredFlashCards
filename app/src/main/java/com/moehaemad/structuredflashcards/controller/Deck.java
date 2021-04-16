@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Deck {
@@ -55,7 +56,10 @@ public class Deck {
      * Set the username for testing.
      * */
     public void setUsername (String newUser){
+        //set global variable to username
         this.username = newUser;
+        //let the User object being called in checking empty login know as well
+        this.mUser.setLogin(newUser);
     }
 
     /**
@@ -98,6 +102,7 @@ public class Deck {
      * Create a network request to get the ids from the API.
      * */
     public void syncDeck(){
+
         //create network request for GET of the ids
         NetworkRequest networkRequest = new NetworkRequest(this.ctx);
         int method = networkRequest.getMethod("GET");
@@ -149,6 +154,23 @@ public class Deck {
         }
     };
 
+    private boolean isValidUser(){
+        //check if username if empty string then return error
+        try{
+            //check if username fields are empty
+            this.mUser.checkEmptyLogin();
+        }catch(Error err){
+            Log.e("Deck createId", "error thrown creating id");
+            return false;
+        }
+        //also check if user exists in api as well
+        UserSetup mUserSetup = new UserSetup(this.ctx);
+        if (!mUserSetup.isUserInApi(this.username)){
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * Associate a deck id with a user.
@@ -156,42 +178,37 @@ public class Deck {
      *  Change the shared preferences to concatenate the id to the JSON array.
      * */
     public synchronized void createId(int id, @Nullable String description){
-        //check if username if empty string then return error
-        try{
-            this.mUser.checkEmptyLogin();
-        }catch(Error err){
-            Log.e("Deck createId", "error thrown creating id");
-        }
-        //get the response listener
-        Response.Listener createIdListener = this.getCreateIdListener(id, description);
-        //grab username
-        //create network request object
-        NetworkRequest mNetworkRequest = new NetworkRequest(this.ctx);
-        int method = mNetworkRequest.getMethod("POST");
-        //set the url
-        String url = WebsiteInterface.CREATE_DECK;
-        //TODO: create helper function for this
-        try {
-            //create post data
-            JSONObject createDeckId = new JSONObject();
-            createDeckId.put("id", id);
-            createDeckId.put("username", this.username);
-            //if description is null then do add nothing in post
-            createDeckId.put("description", description == null ? "" : description);
-            //invalid username will go to error function which will not touch shared preferences
-            //create request and send to queue
-            mNetworkRequest.addToRequestQueue(new JsonObjectRequest(
-                    method,
-                    url,
-                    createDeckId,
-                    createIdListener,
-                    error
-            ));
-        } catch (JSONException e) {
-            Log.e("Deck createID", "error in creating JSON body");
-        }
+        if (isValidUser()){
+            //get the response listener
+            Response.Listener createIdListener = this.getCreateIdListener(id, description);
+            //grab username
+            //create network request object
+            NetworkRequest mNetworkRequest = new NetworkRequest(this.ctx);
+            int method = mNetworkRequest.getMethod("POST");
+            //set the url
+            String url = WebsiteInterface.CREATE_DECK;
+            //TODO: create helper function for this
+            try {
+                //create post data
+                JSONObject createDeckId = new JSONObject()
+                        .put("id", id)
+                        .put("username", this.username)
+                        //if description is null then do add nothing in post
+                        .put("description", description == null ? "" : description);
+                //invalid username will go to error function which will not touch shared preferences
+                //create request and send to queue
+                mNetworkRequest.addToRequestQueue(new JsonObjectRequest(
+                        method,
+                        url,
+                        createDeckId,
+                        createIdListener,
+                        error
+                ));
+            } catch (JSONException e) {
+                Log.e("Deck createID", "error in creating JSON body");
+            }
 
-
+        }
     }
 
     /**
@@ -214,10 +231,10 @@ public class Deck {
                                 "[]"
                         ));
                         //create JSON Object of the id, username, and description
-                        JSONObject toInsert = new JSONObject();
-                        toInsert.put("id", finalId);
-                        toInsert.put("username", username);
-                        toInsert.put("description", finalDescription);
+                        JSONObject toInsert = new JSONObject()
+                                .put("id", finalId)
+                                .put("username", username)
+                                .put("description", finalDescription);
                         //insert the object into the json array
                         mArray.put(toInsert);
                         //open shared preferences and update result for id, username, and description
@@ -270,6 +287,37 @@ public class Deck {
         //used for convenience but function will not enter this stage because of null check.
         return toReturn;
     }
+
+    /**
+     * Return a hashmap of the ids and their associated deck descriptions.
+     * */
+    public HashMap<String, String> getDeckAsHashmap(){
+        //make sure the user is validated
+        if (!isValidUser()){
+            return new HashMap<>();
+        }
+        //initialize a return for the hashmap
+        HashMap<String, String> toReturn = new HashMap<>();
+        //get the json array from the shared preferences
+        JSONArray jsonIds = this.getDeckIds();
+        //if there's no josn array of ids then return empty hashmap
+        if (jsonIds == null) return new HashMap<>();
+        try{
+            for (int i=0, size=jsonIds.length(); i < size; i++){
+                //grab the object each item of the array holds
+                JSONObject jsonObject = jsonIds.getJSONObject(i);
+                //add the object's id/description property as a string into the returned hashmap
+                toReturn.put(jsonObject.getString("id"),
+                        jsonObject.getString("description"));
+            }
+            //return hashmap
+            return toReturn;
+        }catch(JSONException e){
+            Log.e("Deck getDeckAsHashmap", e.getMessage());
+        }
+        //will never get here but used to satisfy method signature.
+        return new HashMap<String, String>();
+    };
 
 
 }
