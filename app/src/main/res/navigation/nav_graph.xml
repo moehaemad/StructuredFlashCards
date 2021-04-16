@@ -15,6 +15,9 @@
             app:popUpTo="@id/startContent" />
         <action
             android:id="@+id/action_startContent_to_checkDeckList2"
+            app:destination="@id/checkCardList" />
+        <action
+            android:id="@+id/action_startContent_to_deckListFragment"
             app:destination="@id/checkDeckList" />
     </fragment>
     <fragment
@@ -28,7 +31,7 @@
         android:label="@string/app_name"
         tools:layout="@layout/fragment_deck_start" />
     <fragment
-        android:id="@+id/checkDeckList"
+        android:id="@+id/checkCardList"
         android:name="com.moehaemad.structuredflashcards.ui.CardFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_card_recycler_list" >
@@ -45,4 +48,9 @@
         android:name="com.moehaemad.structuredflashcards.ui.SingleCard"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_single_card" />
+    <fragment
+        android:id="@+id/checkDeckList"
+        android:name="com.moehaemad.structuredflashcards.ui.DeckListFragment"
+        android:label="fragment_deck_list"
+        tools:layout="@layout/fragment_deck_list" />
 </navigation>

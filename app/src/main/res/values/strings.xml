@@ -13,8 +13,9 @@
     <string name="menu_home">Home</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_user">User</string>
-    <string name="menu_card_create">Create Deck</string>
-    <string name="menu_deck_view">View Cards</string>
+    <string name="menu_card_create">Create Card</string>
+    <string name="menu_card_view">View Cards</string>
+    <string name="menu_deck_view">View Decks</string>
 
     <!--    Deck List recycler view    -->
     <string name="deck_list_default_front">null</string>
@@ -48,6 +49,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--    Deck View items -->
+    <string name="deck_list_item_description">Description: null</string>
+    <string name="deck_list_item_id">id: </string>
 
 
 </resources>

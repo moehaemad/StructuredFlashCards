@@ -18,8 +18,12 @@
             android:icon="@drawable/ic_build_black_24dp"
             android:title="@string/menu_card_create" />
         <item
-            android:id="@+id/checkDeckList"
+            android:id="@+id/checkCardList"
             android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/menu_card_view" />
+        <item
+            android:id="@+id/checkDeckList"
+            android:icon="@drawable/ic_baseline_collections_bookmark_24"
             android:title="@string/menu_deck_view" />
 
     </group>

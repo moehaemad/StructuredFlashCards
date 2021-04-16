@@ -29,7 +29,7 @@ public class DeckListFragment extends Fragment {
      * */
     public void setupRecycler(View root){
         RecyclerView deckList = root.findViewById(R.id.deck_list_recycler);
-        DeckListRecyclerAdapter deckListAdapter = new DeckListRecyclerAdapter();
+        DeckListRecyclerAdapter deckListAdapter = new DeckListRecyclerAdapter(getActivity());
         deckList.setAdapter(deckListAdapter);
         deckList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

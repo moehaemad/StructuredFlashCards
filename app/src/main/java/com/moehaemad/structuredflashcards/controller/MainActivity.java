@@ -1,31 +1,21 @@
 package com.moehaemad.structuredflashcards.controller;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
 import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 import com.moehaemad.structuredflashcards.R;
-import com.moehaemad.structuredflashcards.ui.DeckFragment;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -55,9 +45,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //setup the top bar configuration with the nav controller graph and set the drawer layout
         this.topBarConfig = new  AppBarConfiguration.Builder(
-                R.id.startContent, R.id.createCardFragment, R.id.loginFragment, R.id.checkDeckList)
-                                    .setDrawerLayout(drawerLayout)
-                                    .build();
+                R.id.startContent,
+                R.id.createCardFragment,
+                R.id.loginFragment,
+                R.id.checkCardList)
+                .setDrawerLayout(drawerLayout)
+                .build();
 
         // setup the navigationUI for the navigation drawer using navigation view and nav controller
         NavigationUI.setupActionBarWithNavController(this, navController, this.topBarConfig);

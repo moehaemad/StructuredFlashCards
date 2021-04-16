@@ -8,10 +8,10 @@
 
 
     <TextView
-        android:id="@+id/deck_list_recycler_item_single"
+        android:id="@+id/card_list_recycler_item_single"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E4DFDF"
+        android:background="@color/cardSingleItem"
         android:gravity="center"
         android:padding="@dimen/deck_list_dimen_card"
         android:text="@string/deck_list_default_front"
