@@ -17,18 +17,18 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public class UserSetup {
+public class UserSetup extends User{
 
     private SharedPreferences appPreferences;
     private NetworkRequest networkRequest;
-    private String login = "";
-    private String password = "";
     private Deck userDecks;
 
     /**
      * Public contructor, create preferences, network request, and Deck information.
      * */
     public UserSetup(Context appCtx){
+        //set password and username to be empty given no other information
+        super("", "");
         //setup sharedPreferences for user information
         this.appPreferences = getAppPreferences(appCtx);
         //initialize only once for request
@@ -51,8 +51,9 @@ public class UserSetup {
     public UserSetup (Context appCtx, String login, String password){
         this(appCtx);
         //TODO: deck is created twice
-        //set login and password
-        this.login = login;
+        /*set login and password. Same as User but super() or this() has to be first so using this().
+        for sake of implementation.*/
+                this.login = login;
         this.password = password;
 
     }
@@ -107,6 +108,7 @@ public class UserSetup {
     /**
      * Check shared preference for if user exists or not.
      * */
+    @Override
     public boolean doesUserExist(){
         //check shared preferences not just this.login because a login can exist without api auth
         String user = this.appPreferences.getString(Preferences.USER_NAME, "");
@@ -116,27 +118,42 @@ public class UserSetup {
     }
 
     /**
+     * Check if the user exists in the api and if not changes the preferences and returns false.
+     */
+    public synchronized boolean isUserInApi(String username){
+        Response.Listener<JSONObject> mListener = new Response.Listener<JSONObject>() {
+            @Override
+            public synchronized void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("result")){
+                        //open editor and set the user validated to be true
+                        SharedPreferences.Editor mEditor = appPreferences.edit();
+                        mEditor.putBoolean(Preferences.USER_VALIDATED, true);
+                        mEditor.apply();
+                    }
+                } catch (JSONException e) {
+                    Log.e("usersetup isinapi", e.getMessage());
+                }
+            }
+        };
+        this.networkRequest.addToRequestQueue(new JsonObjectRequest(
+                WebsiteInterface.GET,
+                WebsiteInterface.USER_EXISTS + username,
+                null,
+                mListener,
+                new ErrorResponse()
+        ));
+        //now check the shared preferences to see if the user is validated
+        return this.appPreferences.getBoolean(Preferences.USER_VALIDATED, false);
+    }
+
+    /**
      * Return decks.
      * */
     public Deck getUserDecks() {
         return this.userDecks;
     }
 
-    /**
-     * Return username.
-     * */
-    public String getUsername (){
-        return this.login;
-    }
-
-    /**
-     * If there's no username information given by UI.
-     * */
-    public void checkEmptyLogin (){
-        if (this.login == "" || this.password == ""){
-            throw new Error("Error in login: no username or password");
-        }
-    }
 
     /**
      * Check if user exists in the api given the login and password information.
