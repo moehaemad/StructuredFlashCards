@@ -7,4 +7,5 @@
     <color name="appColor">#F4F7F5</color>
     <color name="usernameBackground">#DEDEDE</color>
     <color name="mainText">#944654</color>
+    <color name="cardSingleItem">#E4DFDF</color>
 </resources>

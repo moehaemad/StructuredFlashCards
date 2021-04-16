@@ -15,4 +15,7 @@
 
     <!--    Recycler View Spinner-->
     <dimen name="cards_recycler_spinner">10dp</dimen>
+    <dimen name="deck_list_fab">20dp</dimen>
+    <dimen name="deck_list_padding">16dp</dimen>
+
 </resources>
