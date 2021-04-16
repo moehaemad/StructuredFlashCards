@@ -62,6 +62,7 @@ public class Deck {
         this.mUser.setLogin(newUser);
     }
 
+
     /**
      * Class used for a generic network request. Intead of anonymous class, this inner class sets
      *  the shared preferences .
@@ -289,26 +290,32 @@ public class Deck {
     }
 
     /**
-     * Return a hashmap of the ids and their associated deck descriptions.
+     * Return a linkedlist of a hashmap of the ids and their associated deck descriptions.
      * */
-    public HashMap<String, String> getDeckAsHashmap(){
+    public LinkedList<HashMap<String, String>> getDeckAsHashmap(){
         //make sure the user is validated
         if (!isValidUser()){
-            return new HashMap<>();
+            return new LinkedList<>();
         }
         //initialize a return for the hashmap
-        HashMap<String, String> toReturn = new HashMap<>();
+        LinkedList<HashMap<String, String>> toReturn = new LinkedList<>();
         //get the json array from the shared preferences
         JSONArray jsonIds = this.getDeckIds();
         //if there's no josn array of ids then return empty hashmap
-        if (jsonIds == null) return new HashMap<>();
+        if (jsonIds == null) return new LinkedList<>();
         try{
             for (int i=0, size=jsonIds.length(); i < size; i++){
                 //grab the object each item of the array holds
                 JSONObject jsonObject = jsonIds.getJSONObject(i);
                 //add the object's id/description property as a string into the returned hashmap
-                toReturn.put(jsonObject.getString("id"),
-                        jsonObject.getString("description"));
+                HashMap<String, String> currentVal = new HashMap<>();
+                //format the hash to put the appropriate information
+                currentVal.put(
+                        jsonObject.getString("id"),
+                        jsonObject.getString("description")
+                );
+                //add the hashmap into the linked list
+                toReturn.add(currentVal);
             }
             //return hashmap
             return toReturn;
@@ -316,7 +323,7 @@ public class Deck {
             Log.e("Deck getDeckAsHashmap", e.getMessage());
         }
         //will never get here but used to satisfy method signature.
-        return new HashMap<String, String>();
+        return new LinkedList<>();
     };
 
 
