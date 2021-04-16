@@ -52,6 +52,7 @@ public class DeckTest {
         this.prefKeys.put("deckIds", Preferences.DECK_ARRAY);
         this.prefKeys.put("username", Preferences.USER_NAME);
         this.prefKeys.put("userSetupValidated", Preferences.USER_VALIDATED);
+        this.prefKeys.put("activeId", Preferences.ACTIVE_DECK_ID);
         //setup the user to create it into the database
         this.createUser();
     }
@@ -71,10 +72,10 @@ public class DeckTest {
         //give information to the Deck context without a username
         //this should result in an error
         //invoking sync Deck without a username which should not change preferences DECK_ARRAY
-        this.mDeck.setUsername("");
+        this.mDeck = new Deck(this.mContext, "");
         this.mDeck.syncDeck();
         //check that no DeckId's are set in sharedPreferences
-        boolean noIds = this.mPreferences.getString(Preferences.DECK_ARRAY, "noDef") ==
+        boolean noIds = this.mPreferences.getString(Preferences.DECK_ARRAY, "") ==
                 "";
         assertTrue(noIds);
     }
@@ -103,7 +104,7 @@ public class DeckTest {
         mEditor.putString(Preferences.DECK_ARRAY,"[1]");
         mEditor.apply();
         //make request to create an id
-        this.mDeck.createId(2, null);
+        this.mDeckWithUser.createId(2, null);
         //check if the value updated in preferences has appended the create id value
         try {
             JSONArray createResult = new JSONArray(this.mPreferences.getString(Preferences.DECK_ARRAY,
@@ -117,27 +118,35 @@ public class DeckTest {
     }
 
     //create deck ids given no username, expect error to be thrown
-    @Test(expected = Error.class)
+    @Test
     public synchronized void createId_noUsername(){
-        this.mDeck.setUsername("");
+        this.removeKeys();
+        this.mDeckWithUser = new Deck(this.mContext, "");
         //expect error to be throws if creating an id without a username attached
-        this.mDeck.createId(0, null);
+        this.mDeckWithUser.createId(0, null);
+        assertEquals("", this.mPreferences.getString(Preferences.DECK_ARRAY, ""));
     }
 
+    //TODO: fix failing test, cached network requests sends multiple requests and stops debugging.
     //create deck ids given not registered username in api, expect empty preferences
     @Test
-    public synchronized void createId_invalidUsername(){
-        this.mDeck.setUsername(" blank ");
-        this.mDeck.createId(10, null);
+    public void createId_invalidUsername(){
+        this.removeKeys();
+        this.mDeckWithUser = new Deck(this.mContext, " blank ");
+        this.mDeckWithUser.createId(10, "some description");
         /*no change will have happened to shared preferences so assert it's still empty string from
             teardown*/
         assertEquals("", this.mPreferences.getString(Preferences.DECK_ARRAY, ""));
     }
 
+    //TODO: stepping through function results in successful test but not while using test runner.
+    //most likely an issue with the way network requests are sent out.
     //boring: create ids with valid user
     @Test
     public synchronized void createId_validUsername(){
+        this.removeKeys();
         int id = 1;
+        this.mDeckWithUser = new Deck(this.mContext, this.user);
         this.mDeckWithUser.createId(id, null);
         //check in shared preferences which will be changed on the network request
         JSONArray actualPreferences = null;
@@ -150,7 +159,6 @@ public class DeckTest {
                     .put("username", this.user);
             JSONArray expectedPreferences = new JSONArray()
                     .put(expectedObject);
-            //TODO: fix comparison bug using String char sequences instead
             assertTrue (expectedPreferences.toString().contentEquals(
                     actualPreferences.toString()
                     ));
@@ -222,7 +230,8 @@ public class DeckTest {
     //set DeckIds from setDeckIds to  be empty, expect empty LinkedList<String>
     @Test
     public synchronized void getDeckIdsAsString_emptyList(){
-        //teardown will have made preferences empty so use as default
+        //make preferences empty as default
+        this.removeKeys();
         LinkedList<String> actualList = this.mDeck.getDeckIdsAsString();
         assertEquals(new LinkedList<String>(), actualList);
     }
@@ -242,8 +251,7 @@ public class DeckTest {
     /**
      * Teardown
      * */
-
-    private void removeKeys(){
+    private synchronized void removeKeys(){
         //change deck ids to be empty, which means not set
         SharedPreferences.Editor mEditor = this.mPreferences.edit();
         //for each values used in shared preferences, tear all down
