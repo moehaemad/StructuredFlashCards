@@ -52,5 +52,14 @@
         android:id="@+id/checkDeckList"
         android:name="com.moehaemad.structuredflashcards.ui.DeckListFragment"
         android:label="fragment_deck_list"
-        tools:layout="@layout/fragment_deck_list" />
+        tools:layout="@layout/fragment_deck_list" >
+        <action
+            android:id="@+id/action_checkDeckList_to_createDeckFragment"
+            app:destination="@id/createDeckFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createDeckFragment"
+        android:name="com.moehaemad.structuredflashcards.ui.CreateDeckFragment"
+        android:label="fragment_create_deck"
+        tools:layout="@layout/fragment_create_deck" />
 </navigation>
