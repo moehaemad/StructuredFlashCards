@@ -155,6 +155,38 @@ public class Deck {
         }
     };
 
+    /**
+     * Set the valid deck id in shared preferences from api answer.
+     * */
+    public synchronized void getValidDeckId(){
+        //create response listener
+        Response.Listener<JSONObject> mListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    //open shared preferences editor
+                    SharedPreferences.Editor mEditor = sharedPreferences.edit();
+                    //if response if true then add the value into the shared preferences
+                    if (response.getBoolean("result")){
+                        mEditor.putInt(Preferences.VALID_ID, response.getInt("max"));
+                        mEditor.apply();
+                    }
+                } catch (JSONException e) {
+                    Log.e("deck getvalidDeckid", e.getMessage());
+                }
+            }
+        };
+        //create network request
+        NetworkRequest mRequest = new NetworkRequest(this.ctx);
+        mRequest.addToRequestQueue(new JsonObjectRequest(
+                WebsiteInterface.GET,
+                WebsiteInterface.GET_VALID_ID,
+                null,
+                mListener,
+                error
+        ));
+    };
+
     private boolean isValidUser(){
         //check if username if empty string then return error
         try{
@@ -311,7 +343,11 @@ public class Deck {
                 HashMap<String, String> currentVal = new HashMap<>();
                 //format the hash to put the appropriate information
                 currentVal.put(
-                        jsonObject.getString("id"),
+                        "id",
+                        jsonObject.getString("id")
+                );
+                currentVal.put(
+                        "description",
                         jsonObject.getString("description")
                 );
                 //add the hashmap into the linked list
