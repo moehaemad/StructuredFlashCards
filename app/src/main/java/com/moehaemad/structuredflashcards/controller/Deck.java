@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.UnknownServiceException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -209,30 +210,34 @@ public class Deck {
      * Associate a deck id with a user.
      *
      *  Change the shared preferences to concatenate the id to the JSON array.
+     *  TODO: update tests to accomodate valid id being grabbed from api into preferences
+     *  TODO: remove id calls in tests and make description nonnullable
      * */
-    public synchronized void createId(int id, @Nullable String description){
+    public synchronized void createId(@Nullable Integer id, @Nullable String description){
         if (isValidUser()){
             //get the response listener
             Response.Listener createIdListener = this.getCreateIdListener(id, description);
-            //grab username
+            //grab username because it will already by validated
+            this.username = UserSetup.getUserFromPreferences(this.ctx);
             //create network request object
             NetworkRequest mNetworkRequest = new NetworkRequest(this.ctx);
-            int method = mNetworkRequest.getMethod("POST");
-            //set the url
-            String url = WebsiteInterface.CREATE_DECK;
+            //grab the valid if from the api
+            this.getValidDeckId();
+            Integer validId = this.sharedPreferences.getInt(Preferences.VALID_ID, -1);
+            //grab the valid deck
             //TODO: create helper function for this
             try {
                 //create post data
                 JSONObject createDeckId = new JSONObject()
-                        .put("id", id)
+                        .put("id", validId)
                         .put("username", this.username)
                         //if description is null then do add nothing in post
                         .put("description", description == null ? "" : description);
                 //invalid username will go to error function which will not touch shared preferences
                 //create request and send to queue
                 mNetworkRequest.addToRequestQueue(new JsonObjectRequest(
-                        method,
-                        url,
+                        WebsiteInterface.POST,
+                        WebsiteInterface.CREATE_DECK,
                         createDeckId,
                         createIdListener,
                         error
