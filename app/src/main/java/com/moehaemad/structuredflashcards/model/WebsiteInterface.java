@@ -14,6 +14,7 @@ public interface WebsiteInterface {
     String CHECK_USER = PRODUCTION + "checkuser/";
     String USER_EXISTS = PRODUCTION + "userexists/";
     String GET_DECKS = PRODUCTION + "getDecks/";
+    String GET_VALID_ID = PRODUCTION + "getId";
     String GET_CARDS = PRODUCTION + "getCards/";
     String SET_CARD = PRODUCTION + "setCard/";
     String PREV_FRONT = "PREV_FRONT";

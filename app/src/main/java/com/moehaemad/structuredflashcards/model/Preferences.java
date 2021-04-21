@@ -9,4 +9,5 @@ public interface Preferences {
 //    this cards array will be appended with ex. _0 for deck id of 0 so multiple values will be stored
     String CARDS_ARRAY = "CARDS_ARRAY";
     String ACTIVE_DECK_ID = "ACTIVE_DECK_ID";
+    String VALID_ID = "VALID_ID";
 }
