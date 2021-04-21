@@ -66,6 +66,13 @@ public class UserSetup extends User{
                 Context.MODE_PRIVATE);
     }
 
+    public static synchronized String getUserFromPreferences (Context ctx){
+        SharedPreferences mPreferences = ctx.getSharedPreferences(Preferences.PACKAGE,
+                Context.MODE_PRIVATE);
+        String user = mPreferences.getString(Preferences.USER_NAME, "");
+        return user;
+    }
+
     /**
      * Verify the user as being created in shared preferences and synchronize if values inconsistent.
      * */
